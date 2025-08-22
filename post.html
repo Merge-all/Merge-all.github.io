@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <title>文章详情 - 我的博客</title>
+  <style>
+    /* 复用列表页的样式，并添加文章内容的样式 */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --text-color: #2b2d42;
+      --light-color: #f8f9fa;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f7ff;
+      color: var(--text-color);
+      line-height: 1.8;
+    }
+    
+    .post-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    
+    .post-title {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+    }
+    
+    .post-date {
+      color: #6c757d;
+      font-size: 0.9em;
+      margin: 10px 0 20px;
+    }
+    
+    .post-content {
+      margin-top: 20px;
+    }
+    
+    /* Markdown 内容样式（适配标题、列表、代码块等） */
+    .post-content h1 { font-size: 1.8em; margin: 20px 0 10px; }
+    .post-content h2 { font-size: 1.5em; margin: 18px 0 8px; }
+    .post-content p { margin: 10px 0; }
+    .post-content ul, .post-content ol { margin: 10px 0 10px 20px; }
+    .post-content code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; }
+    .post-content pre { 
+      background: #f0f0f0; 
+      padding: 15px; 
+      border-radius: 5px; 
+      overflow-x: auto; 
+      margin: 15px 0; 
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← 返回文章列表</a>
+  
+  <div class="post-container">
+    <h1 class="post-title" id="postTitle"></h1>
+    <div class="post-date" id="postDate"></div>
+    <div class="post-content" id="postContent"></div>
+  </div>
+
+  <script>
+    // 从 URL 中获取文章文件名（例如从 ?post=2025-08-10-暑假week3 中提取）
+    const urlParams = new URLSearchParams(window.location.search);
+    const postName = urlParams.get('post'); // 获取文章标识（如 2025-08-10-暑假week3）
+    
+    // 如果获取到文章标识，则加载并渲染 Markdown
+    if (postName) {
+      // 1. 动态加载对应的 .md 文件（路径需与你的实际文件存放位置一致）
+      fetch(`posts/${postName}.md`) // 假设 .md 文件存放在 posts 文件夹下
+        .then(response => {
+          if (!response.ok) throw new Error('文章不存在');
+          return response.text(); // 获取 Markdown 文本内容
+        })
+        .then(markdownContent => {
+          // 2. 用 marked.js 将 Markdown 转换为 HTML
+          const htmlContent = marked.parse(markdownContent);
+          
+          // 3. 将 HTML 插入到页面中
+          document.getElementById('postContent').innerHTML = htmlContent;
+          
+          // 4. 可以额外设置标题和日期（也可以从 Markdown 文件的开头提取，如 Front Matter）
+          document.getElementById('postTitle').textContent = postName.replace(/-/g, ' '); // 简单处理标题
+          document.getElementById('postDate').textContent = new Date().toLocaleDateString(); // 示例日期
+        })
+        .catch(error => {
+          document.getElementById('postContent').innerHTML = `<p>错误：${error.message}</p>`;
+        });
+    } else {
+      document.getElementById('postContent').innerHTML = '<p>未找到文章，请返回列表页选择文章。</p>';
+    }
+  </script>
+</body>
+</html>
