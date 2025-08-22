@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Merge-all</title>
+  <meta name="description" content="Merge-all — 融合热爱，汇聚可能。一个关于技术、开源与人文思考的博客平台。" />
+  <meta property="og:title" content="Merge-all | 融合热爱，汇聚可能" />
+  <meta property="og:description" content="融合每一份热爱，汇聚所有可能。代码交织梦想，星辰连成银河。" />
+  <meta property="og:image" content="https://cdn.luogu.com.cn/upload/image_hosting/30jra2vy.png" />
+  <meta property="og:url" content="./" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+  <title>Merge-all | 融合热爱，汇聚可能</title>
   <style>
     * {
       margin: 0;
@@ -22,7 +29,7 @@
       position: relative;
     }
 
-    /* 背景遮罩（增强文字可读性） */
+    /* 背景遮罩 */
     body::before {
       content: '';
       position: fixed;
@@ -138,19 +145,16 @@
       perspective: 1000px;
     }
 
-    /* 3D 倾斜标题 */
+    /* 主标题 */
     h1 {
       margin: 0;
-      font-size: 3.6em;
-      font-weight: 800;
-      letter-spacing: 4px;
+      font-size: 4em;
+      font-weight: 900;
+      letter-spacing: 6px;
       text-shadow: 
         0 0 15px rgba(255,255,255,0.9),
         0 0 30px rgba(255,110,220,0.7),
         0 0 60px rgba(255,110,220,0.4);
-      animation: 
-        pulse 3s ease-in-out infinite alternate,
-        colorShift 8s linear infinite;
       background: linear-gradient(90deg, #ff6edc, #b387ff, #6ecfff, #ffdd99);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -158,7 +162,7 @@
       position: relative;
       display: inline-block;
       transform: translateZ(20px);
-      filter: drop-shadow(0 0 10px rgba(255,110,220,0.5));
+      filter: drop-shadow(0 0 15px rgba(255,110,220,0.6));
     }
 
     @keyframes pulse {
@@ -169,6 +173,23 @@
     @keyframes colorShift {
       0% { background-position: 0% 50%; }
       100% { background-position: 200% 50%; }
+    }
+
+    /* 副标题 */
+    .tagline {
+      font-size: 1.1em;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 1px;
+      margin-top: -10px;
+      font-weight: 300;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      max-width: 300px;
+      animation: fadeIn 1.2s ease-out 0.6s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* 花纹 */
@@ -274,10 +295,11 @@
 
     /* 响应式 */
     @media (max-width: 768px) {
-      h1 { font-size: 2.6em; }
+      h1 { font-size: 2.8em; }
       .glass-card { width: 90%; padding: 40px 20px; margin: 80px auto; }
       .quote { font-size: 1.1em; }
       .flourish svg { width: 30px; height: 30px; }
+      .tagline { font-size: 1em; }
     }
   </style>
 </head>
@@ -303,7 +325,10 @@
           <circle cx="50" cy="30" r="3" fill="#ff6edc"/>
         </svg>
       </div>
-      <h1>Merge-all</h1>
+      <div>
+        <h1>Merge-all</h1>
+        <p class="tagline">一个融合技术、开源与人文思考的社区</p>
+      </div>
       <div class="flourish right">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <path d="M50 10 C60 20, 70 30, 65 45 C60 60, 40 60, 35 45 C30 30, 40 20, 50 10 Z" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
@@ -317,7 +342,7 @@
     <p class="quote">开源不止于技术，更在于连接人心</p>
     <p class="quote">每一次提交，都是对未来的温柔承诺</p>
     <p class="quote">或许你并不光芒万丈，但你一定温暖有光</p>
-    <a href="/blogs">前往 Merge-all 博客</a>
+    <a href="./blogs/index.html" target="_self" rel="noopener">前往 Merge-all 博客</a>
   </div>
 
   <!-- 粒子背景 -->
@@ -325,7 +350,7 @@
 
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
-    // 粒子系统升级
+    // 粒子系统
     particlesJS('particles', {
       "particles": {
         "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -401,9 +426,9 @@
       title.style.transform = 'rotateX(0) rotateY(0)';
     });
 
-    // 飘落花瓣（可替换为科技感符号）
+    // 飘落花瓣（科技符号）
     const petals = document.getElementById('petals');
-    const symbols = ['💻', '🔧', '🚀', '🌟', '⚡', '🌐', '🔍', '📚']; // 更符合 Merge-all 主题
+    const symbols = ['💻', '🔧', '🚀', '🌟', '⚡', '🌐', '🔍', '📚'];
     setInterval(() => {
       const petal = document.createElement('div');
       petal.className = 'petal';
@@ -444,7 +469,7 @@
       }
     });
 
-    // 文字浮现
+    // 文字逐行浮现
     document.querySelectorAll('.quote').forEach((p, index) => {
       setTimeout(() => {
         p.classList.add('show');
