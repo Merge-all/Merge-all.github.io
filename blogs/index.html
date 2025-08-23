@@ -3,8 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Merge-all</title>
+  <title>Merge-all's Blog</title>
+
+  <!-- 字体：加入手写夸张体 Great Vibes -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- 数学公式 & Markdown & 高亮 -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$','$']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: ['base', 'ams']
+      },
+      chtml: {
+        scale: 1.05,
+        matchFontHeight: false,
+        displayAlign: 'center'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
   <style>
+    :root {
+      --primary: #e91e63;
+      --text: #2c3e50;
+      --text-light: #7f8c8d;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+      --border: #ecf0f1;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -12,445 +51,547 @@
     }
 
     body {
-      background: url('https://cdn.luogu.com.cn/upload/image_hosting/30jra2vy.png') center/cover fixed;
+      font-family: 'Source Sans Pro', sans-serif;
+      color: var(--text);
+      line-height: 1.8;
+      background: var(--bg);
+      padding: 0;
       margin: 0;
-      font-family: 'Arial', 'Microsoft YaHei', sans-serif;
       min-height: 100vh;
-      color: white;
-      text-align: center;
-      overflow: hidden;
+    }
+
+    /* ============= 顶部进度条 ============= */
+    #reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4361ee, #4cc9f0, #ff69b4);
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.1s ease;
+      box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
+    }
+
+    /* ============= 顶部导航 ============= */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Logo：粉色 + 夸张手写体 */
+    .logo {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.2em;
+      font-weight: normal;
+      color: #ff69b4; /* 粉色 */
+      text-decoration: none;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 6px rgba(255, 105, 180, 0.3);
+    }
+
+    .logo:hover {
+      color: #ff1493;
+      text-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+      transform: scale(1.08);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1em;
       position: relative;
+      padding: 4px 0;
+      transition: var(--transition);
     }
 
-    /* 背景遮罩（增强文字可读性） */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.4) 100%);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    /* 背景浮动视差 */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: inherit;
-      background-size: cover;
-      background-position: center;
-      z-index: -3;
-      transform: translate(0, 0);
-      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.8, 1);
-      pointer-events: none;
-      opacity: 0.6;
-      mix-blend-mode: screen;
-    }
-
-    /* 背景呼吸光 */
-    .bg-glow {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at center, rgba(255,100,180,0.1), rgba(0,0,30,0.3));
-      opacity: 0;
-      animation: breathGlow 10s ease-in-out infinite alternate;
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    @keyframes breathGlow {
-      0% { opacity: 0.2; }
-      100% { opacity: 0.6; }
-    }
-
-    /* 鼠标光晕 */
-    .cursor-glow {
-      position: fixed;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      box-shadow: 0 0 40px 20px rgba(255,255,255,0.15);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 1;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      mix-blend-mode: screen;
-    }
-
-    /* 玻璃卡片（关键：降低 blur，增加背景对比） */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(6px);           /* 原来是 18px，现在改为 6px，更清晰 */
-      -webkit-backdrop-filter: blur(6px);   /* Safari 支持 */
-      width: 85%;
-      max-width: 680px;
-      margin: 90px auto;
-      padding: 70px 50px;
-      border-radius: 26px;
-      box-shadow: 
-        0 10px 40px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(255, 255, 255, 0.1),
-        inset 0 1px 0 rgba(255,255,255,0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      animation: floatUp 1.2s ease-out forwards;
-      transform: translateY(30px);
-      opacity: 0;
-      position: relative;
-      z-index: 2;
-      cursor: default;
-      overflow: hidden;
-    }
-
-    /* 卡片光扫特效 */
-    .glass-card::before {
+    .nav-links a::after {
       content: '';
       position: absolute;
-      top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: linear-gradient(transparent, rgba(255,255,255,0.1), transparent);
-      transform: rotate(45deg);
-      animation: scanCard 6s ease-in-out infinite;
-      pointer-events: none;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
     }
 
-    @keyframes scanCard {
-      0% { transform: rotate(45deg) translate(-100%, -100); }
-      100% { transform: rotate(45deg) translate(100%, 100%); }
+    .nav-links a:hover {
+      color: var(--primary);
     }
 
-    @keyframes floatUp {
-      0% { opacity: 0; transform: translateY(30px); }
-      100% { opacity: 1; transform: translateY(0); }
+    .nav-links a:hover::after {
+      width: 100%;
     }
 
-    /* 标题容器 */
-    .title-container {
+    /* ============= 主内容区域 ============= */
+    .container {
+      max-width: 800px;
+      margin: 120px auto 60px;
+      padding: 0 40px;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .title h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5em;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .title p {
+      color: var(--text-light);
+      font-size: 1.2em;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ============= 博客文章列表 ============= */
+    .posts {
+      display: grid;
+      gap: 30px;
+    }
+
+    .post {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      border: 1px solid var(--border);
+    }
+
+    .post:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .post-header {
+      padding: 30px 30px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-title {
+      font-size: 1.8em;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+      text-decoration: none;
+      display: inline-block;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .post-title:hover {
+      color: var(--primary);
+    }
+
+    .post-meta {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 20px;
-      margin: 0 0 20px 0;
-      position: relative;
-      transform-style: preserve-3d;
-      perspective: 1000px;
+      color: var(--text-light);
+      font-size: 0.9em;
     }
 
-    /* 3D 倾斜标题 */
-    h1 {
-      margin: 0;
-      font-size: 3.6em;
-      font-weight: 800;
-      letter-spacing: 4px;
-      text-shadow: 
-        0 0 15px rgba(255,255,255,0.9),
-        0 0 30px rgba(255,110,220,0.7),
-        0 0 60px rgba(255,110,220,0.4);
-      animation: 
-        pulse 3s ease-in-out infinite alternate,
-        colorShift 8s linear infinite;
-      background: linear-gradient(90deg, #ff6edc, #b387ff, #6ecfff, #ffdd99);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-      display: inline-block;
-      transform: translateZ(20px);
-      filter: drop-shadow(0 0 10px rgba(255,110,220,0.5));
+    .post-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    @keyframes pulse {
-      0% { text-shadow: 0 0 10px rgba(255,255,255,0.6), 0 0 20px rgba(255,110,220,0.4); }
-      100% { text-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,110,220,0.6), 0 0 60px rgba(255,110,220,0.4); }
+    .post-excerpt {
+      padding: 20px 30px 30px;
+      color: var(--text-light);
+      font-size: 1.1em;
+      line-height: 1.7;
     }
 
-    @keyframes colorShift {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
+    /* ============= 阅读器 ============= */
+    #reader {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      overflow-y: auto;
+      padding: 90px 20px 60px;
+      box-sizing: border-box;
+      z-index: 1000;
     }
 
-    /* 花纹 */
-    .flourish {
-      font-size: 1.8em;
-      opacity: 0;
-      animation: appearRotate 1.2s ease-out 0.8s forwards;
-    }
-
-    .flourish svg {
-      width: 45px;
-      height: 45px;
-      filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
-      animation: pulseGlow 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes pulseGlow {
-      0% { filter: drop-shadow(0 0 6px rgba(200, 255, 255, 0.5)); }
-      100% { filter: drop-shadow(0 0 14px rgba(255, 200, 255, 0.8)); }
-    }
-
-    /* 引用文字 */
-    .quote {
-      font-size: 1.25em;
-      line-height: 1.9;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      color: rgba(255, 255, 255, 0.95); /* 增强对比度 */
-      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    .quote.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* 按钮增强 */
-    a {
-      display: inline-block;
-      margin-top: 40px;
-      padding: 14px 32px;
-      background: rgba(255,255,255,0.25);
+    /* 返回按钮：文字改为 Back，小一点 */
+    #reader button {
+      padding: 12px 28px;
+      background: var(--primary);
       color: white;
-      text-decoration: none;
+      border: none;
       border-radius: 50px;
-      font-size: 1.15em;
-      font-weight: 500;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 
-        0 6px 20px rgba(0,0,0,0.2),
-        0 0 15px rgba(255,255,255,0.1);
-      transition: all 0.3s ease;
-      letter-spacing: 1px;
-      position: relative;
-      overflow: hidden;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1.1em;
+      margin-bottom: 50px;
+      transition: var(--transition);
+      box-shadow: 0 8px 24px rgba(67, 97, 238, 0.4);
     }
 
-    a::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-      transition: none;
+    #reader button:hover {
+      background: #3a56d4;
+      transform: scale(1.08);
+      box-shadow: 0 10px 30px rgba(67, 97, 238, 0.5);
     }
 
-    a:hover::before {
-      left: 100%;
-      transition: left 0.8s ease;
+    #reader-content {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ============= 关键修复：列表不缩进 ============= */
+    #reader-content ul,
+    #reader-content ol,
+    .post-excerpt ul,
+    .post-excerpt ol {
+      margin-left: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    #reader-content ul > li::before,
+    .post-excerpt ul > li::before {
+      content: "•";
+      margin-right: 0.5em;
+      color: inherit;
+    }
+
+    #reader-content li,
+    .post-excerpt li {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+      text-indent: 0;
+    }
+
+    /* ============= 链接颜色：黑色，仅 hover 时变色 ============= */
+    a {
+      text-decoration: none !important;
+      color: var(--text) !important;
+      cursor: pointer;
     }
 
     a:hover {
-      background: rgba(255,255,255,0.45);
-      transform: translateY(-5px) scale(1.05);
-      box-shadow: 
-        0 12px 30px rgba(0,0,0,0.3),
-        0 0 30px rgba(255,255,255,0.2);
+      color: var(--primary) !important;
     }
 
-    /* 飘落花瓣容器 */
-    .petals {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
+    a[href^="http"] {
+      color: var(--text) !important;
     }
 
-    .petal {
+    a[href^="http"]:hover {
+      color: var(--primary) !important;
+      text-decoration: underline !important;
+    }
+
+    /* ============= 代码块 ============= */
+    pre {
+      position: relative;
+      background: #f8f9ff;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+      overflow-x: auto;
+      margin: 1.6em 0;
+      transition: 0.3s;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
+    }
+
+    /* 复制按钮：更小，文字为 COPY */
+    .copy-btn {
       position: absolute;
-      top: -50px;
-      font-size: 20px;
+      top: 10px;
+      right: 10px;
+      background: #95a5a6;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      font-size: 0.75em;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
       opacity: 0.7;
-      pointer-events: none;
-      animation: fall linear forwards;
+      transition: all 0.2s ease;
     }
 
-    @keyframes fall {
-      to {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
+    .copy-btn:hover {
+      background: #7f8c8d;
+      opacity: 1;
+      transform: scale(1.05);
     }
 
-    /* 响应式 */
+    .lang-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 0.75em;
+      font-weight: bold;
+    }
+
+    code {
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
+    }
+
+    /* ============= 图片居中 ============= */
+    #reader-content img {
+      display: block;
+      margin: 1em auto;
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    /* ============= 响应式 ============= */
     @media (max-width: 768px) {
-      h1 { font-size: 2.6em; }
-      .glass-card { width: 90%; padding: 40px 20px; margin: 80px auto; }
-      .quote { font-size: 1.1em; }
-      .flourish svg { width: 30px; height: 30px; }
+      .header {
+        padding: 16px 20px;
+      }
+      .logo {
+        font-size: 2em;
+      }
+      .nav-links {
+        gap: 20px;
+      }
+      .container {
+        margin-top: 100px;
+        padding: 0 20px;
+      }
+      .title h1 {
+        font-size: 2.8em;
+      }
+      .title p {
+        font-size: 1.1em;
+      }
+      .post-header, .post-excerpt {
+        padding: 25px;
+      }
+      .post-title {
+        font-size: 1.6em;
+      }
+      #reader {
+        padding: 100px 20px 40px;
+      }
+      #reader button {
+        padding: 10px 24px;
+        font-size: 1em;
+      }
+      .copy-btn {
+        padding: 3px 6px;
+        font-size: 0.7em;
+      }
+      .lang-tag {
+        font-size: 0.7em;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- 背景呼吸光 -->
-  <div class="bg-glow"></div>
+  <!-- 顶部进度条 -->
+  <div id="reading-progress"></div>
 
-  <!-- 鼠标光晕 -->
-  <div class="cursor-glow" id="cursorGlow"></div>
+  <!-- 顶部导航 -->
+  <header class="header">
+    <a href="/" class="logo">Merge-all</a>
+    <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="#" class="active">Blog</a>
+    </nav>
+  </header>
 
-  <!-- 飘落花瓣 -->
-  <div class="petals" id="petals"></div>
-
-  <!-- 点击特效容器 -->
-  <div id="clickEffect" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3;"></div>
-
-  <div class="glass-card" id="card">
-    <div class="title-container" id="title">
-      <div class="flourish left">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 10 C60 20, 70 30, 65 45 C60 60, 40 60, 35 45 C30 30, 40 20, 50 10 Z" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
-          <circle cx="50" cy="30" r="3" fill="#ff6edc"/>
-        </svg>
-      </div>
-      <h1>Merge-all</h1>
-      <div class="flourish right">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 10 C60 20, 70 30, 65 45 C60 60, 40 60, 35 45 C30 30, 40 20, 50 10 Z" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
-          <circle cx="50" cy="30" r="3" fill="#b387ff"/>
-        </svg>
-      </div>
+  <!-- 主内容 -->
+  <div class="container">
+    <div class="title">
+      <h1>My Blog</h1>
+      <p>记录算法学习的点点滴滴，分享思考与感悟</p>
     </div>
 
-    <p class="quote">那是显示于脑海中最后的C级浪漫</p>
-    <p class="quote">许下最终的朦胧</p>
-    <p class="quote">或许你并不光芒万丈，但你一定温暖有光</p>
-    <a href="/blogs">前往 Merge-all 博客</a>
+    <div class="posts">
+      <article class="post">
+        <div class="post-header">
+          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md')">
+            构造专练
+          </h2>
+          <div class="post-meta">
+            <div class="post-meta-item">
+              <i class="far fa-calendar"></i>
+              <span>2025-08-11</span>
+            </div>
+            <div class="post-meta-item">
+              <i class="far fa-clock"></i>
+              <span>5 min read</span>
+            </div>
+          </div>
+        </div>
+        <div class="post-excerpt">
+          构造太菜了，多多练习涨涨脑子。
+        </div>
+      </article>
+      <article class="post">
+        <div class="post-header">
+          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md')">
+            决策性 dp
+          </h2>
+          <div class="post-meta">
+            <div class="post-meta-item">
+              <i class="far fa-calendar"></i>
+              <span>2025-08-16</span>
+            </div>
+            <div class="post-meta-item">
+              <i class="far fa-clock"></i>
+              <span>5 min read</span>
+            </div>
+          </div>
+        </div>
+        <div class="post-excerpt">
+          优化 dp
+        </div>
+      </article>
+    </div>
   </div>
 
-  <!-- 粒子背景 -->
-  <canvas id="particles" style="position:fixed;top:0;left:0;z-index:-1;width:100%;height:100%"></canvas>
+  <!-- 阅读器 -->
+  <div id="reader">
+    <button onclick="closeReader()">Back</button>
+    <div id="reader-content"></div>
+  </div>
 
-  <!-- 引入 particles.js -->
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
-    // 粒子系统
-    particlesJS('particles', {
-      "particles": {
-        "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
-        "color": { "value": ["#ffffff", "#ff99cc", "#99ccff", "#ccff99"] },
-        "shape": { "type": "circle" },
-        "opacity": {
-          "value": 0.8,
-          "random": true,
-          "anim": { "enable": true, "speed": 2, "opacity_min": 0.1 }
-        },
-        "size": {
-          "value": 4,
-          "random": true,
-          "anim": { "enable": true, "speed": 4, "size_min": 0.2 }
-        },
-        "line_linked": {
-          "enable": true,
-          "distance": 150,
-          "color": "#ffffff",
-          "opacity": 0.3,
-          "width": 1.5
-        },
-        "move": {
-          "enable": true,
-          "speed": 1.8,
-          "direction": "none",
-          "random": true,
-          "out_mode": "out",
-          "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 }
+    // 初始化 marked
+    document.addEventListener('DOMContentLoaded', () => {
+      marked.setOptions({
+        gfm: true,
+        breaks: true,
+        smartLists: true,
+        highlight: (code, lang) => {
+          const hl = hljs.getLanguage(lang) ? lang : 'plaintext';
+          return hljs.highlight(code, { language: hl }).value;
         }
-      },
-      "interactivity": {
-        "events": {
-          "onhover": { "enable": true, "mode": "grab", "parallax": { "enable": true, "force": 50, "smooth": 20 } },
-          "onclick": { "enable": true, "mode": "push", "particles_nb": 5 }
-        },
-        "modes": {
-          "grab": { "distance": 160, "line_linked": { "opacity": 0.8 } },
-          "push": { "particles_nb": 5 }
+      });
+
+      // 进度条
+      window.addEventListener('scroll', () => {
+        const total = document.body.scrollHeight - window.innerHeight;
+        const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
+        const progressBar = document.getElementById('reading-progress');
+        if (progressBar) {
+          progressBar.style.width = `${Math.min(progress, 100)}%`;
         }
-      },
-      "retina_detect": true
+      });
     });
 
-    // 鼠标光晕
-    const glow = document.getElementById('cursorGlow');
-    document.addEventListener('mousemove', (e) => {
-      glow.style.left = e.clientX + 'px';
-      glow.style.top = e.clientY + 'px';
-      glow.style.opacity = 0.7;
-    });
+    // 加载文章
+    function loadPost(url) {
+      const reader = document.getElementById('reader');
+      const contentEl = document.getElementById('reader-content');
 
-    // 背景视差
-    document.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 10;
-      const y = (e.clientY / window.innerHeight - 0.5) * 5;
-      document.querySelector('body::after').style.transform = `translate(${x}px, ${y}px) scale(1.02)`;
-    });
-
-    // 3D 标题倾斜
-    const title = document.getElementById('title');
-    title.addEventListener('mousemove', (e) => {
-      const rect = title.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rY = (x - centerX) / 20;
-      const rX = -(y - centerY) / 20;
-      title.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg)`;
-    });
-    title.addEventListener('mouseleave', () => {
-      title.style.transform = 'rotateX(0) rotateY(0)';
-    });
-
-    // 飘落花瓣（科技感符号）
-    const petals = document.getElementById('petals');
-    const symbols = ['💻', '🔧', '🚀', '🌟', '⚡', '🌐', '🔍', '📚'];
-    setInterval(() => {
-      const petal = document.createElement('div');
-      petal.className = 'petal';
-      petal.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = 15 + Math.random() * 20 + 's';
-      petal.style.opacity = 0.6 + Math.random() * 0.4;
-      petals.appendChild(petal);
-      setTimeout(() => petals.removeChild(petal), 30000);
-    }, 800);
-
-    // 点击爆炸星光
-    const effect = document.getElementById('clickEffect');
-    document.addEventListener('click', (e) => {
-      for (let i = 0; i < 12; i++) {
-        const star = document.createElement('div');
-        const angle = (Math.PI * 2 / 12) * i;
-        const dist = 60 + Math.random() * 40;
-        const x = Math.cos(angle) * dist;
-        const y = Math.sin(angle) * dist;
-        star.style.position = 'absolute';
-        star.style.width = '4px';
-        star.style.height = '4px';
-        star.style.borderRadius = '50%';
-        star.style.backgroundColor = ['#ff6edc', '#b387ff', '#6ecfff', '#ffdd99'][i % 4];
-        star.style.boxShadow = `0 0 15px ${['#ff6edc', '#b387ff', '#6ecfff', '#ffdd99'][i % 4]}`;
-        star.style.left = (e.clientX - 2) + 'px';
-        star.style.top = (e.clientY - 2) + 'px';
-        star.style.transform = 'scale(0)';
-        star.style.transition = 'all 0.8s ease-out';
-        star.style.pointerEvents = 'none';
-        effect.appendChild(star);
-        setTimeout(() => {
-          star.style.transform = `translate(${x}px, ${y}px) scale(2)`;
-          star.style.opacity = 0;
-        }, 10);
-        setTimeout(() => { effect.removeChild(star); }, 810);
+      if (!contentEl) {
+        console.error('reader-content element not found');
+        return;
       }
-    });
 
-    // 文字逐行浮现
-    document.querySelectorAll('.quote').forEach((p, index) => {
-      setTimeout(() => {
-        p.classList.add('show');
-      }, 900 + index * 600);
-    });
+      reader.style.display = 'block';
+      window.scrollTo(0, 0);
+      contentEl.innerHTML = '<p style="color:#7f8c8d; text-align:center; font-size:1.1em">加载中……</p>';
+
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.text();
+        })
+        .then(md => {
+          contentEl.innerHTML = marked.parse(md);
+
+          // 处理代码块
+          contentEl.querySelectorAll('pre code').forEach(block => {
+            const lang = block.className.replace('language-', '') || 'text';
+            const displayName = { 'cpp': 'C++', 'python': 'Python', 'java': 'Java' }[lang] || lang.toUpperCase();
+
+            const langTag = document.createElement('div');
+            langTag.textContent = displayName;
+            langTag.className = 'lang-tag';
+            block.parentNode.style.position = 'relative';
+            block.parentNode.insertBefore(langTag, block);
+
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.onclick = () => {
+              navigator.clipboard.writeText(block.textContent).then(() => {
+                btn.textContent = '✓';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+              }).catch(err => {
+                console.error('复制失败:', err);
+                btn.textContent = '✗';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+              });
+            };
+            block.parentNode.appendChild(btn);
+
+            hljs.highlightElement(block);
+          });
+
+          // 渲染数学公式
+          if (window.MathJax) {
+            MathJax.typesetClear();
+            MathJax.typeset([contentEl]);
+          }
+        })
+        .catch(err => {
+          console.error('加载失败:', err);
+          contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
+        });
+    }
+
+    function closeReader() {
+      const reader = document.getElementById('reader');
+      if (reader) {
+        reader.style.display = 'none';
+      }
+    }
   </script>
 </body>
 </html>
