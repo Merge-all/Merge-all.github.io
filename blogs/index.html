@@ -67,7 +67,7 @@
         body {
             font-family: 'Source Sans Pro', sans-serif;
             color: var(--text);
-            line-height: 1.8;
+            line-height: 1.6;
             background: var(--bg);
             padding: 0;
             margin: 0;
@@ -80,7 +80,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            height: 4px;
+            height: 6px;
             background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
             width: 0%;
             z-index: 1000;
@@ -93,7 +93,7 @@
             position: fixed;
             top: var(--header-height);
             left: 0;
-            height: 3px;
+            height: 4px;
             background: linear-gradient(90deg, var(--accent), var(--secondary));
             width: 0%;
             z-index: 999;
@@ -491,7 +491,7 @@
             position: fixed;
             top: 100px;
             right: 20px;
-            max-width: 250px;
+            max-width: 280px;
             max-height: calc(100vh - 150px);
             overflow-y: auto;
             background: var(--card);
@@ -500,11 +500,25 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             display: none;
+            z-index: 998;
         }
 
         .toc-header {
             font-weight: bold;
             margin-bottom: 10px;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toc-close {
+            cursor: pointer;
+            font-size: 1.2em;
+            color: var(--text-light);
+        }
+
+        .toc-close:hover {
             color: var(--primary);
         }
 
@@ -542,6 +556,130 @@
             cursor: pointer;
             z-index: 999;
             box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .toc-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* ============= 音乐播放器 ============= */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--card);
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 900;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .music-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-btn:hover {
+            color: var(--primary);
+            background: rgba(var(--primary-rgb), 0.1);
+        }
+
+        .music-info {
+            max-width: 180px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 0.9em;
+        }
+
+        .music-title {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .music-artist {
+            font-size: 0.8em;
+            color: var(--text-light);
+        }
+
+        .playlist {
+            position: absolute;
+            bottom: 70px;
+            left: 0;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 250px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 901;
+            border: 1px solid var(--border);
+        }
+
+        .playlist-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .playlist-item:last-child {
+            border-bottom: none;
+        }
+
+        .playlist-item:hover {
+            background: rgba(var(--primary-rgb), 0.1);
+        }
+
+        .playlist-item.active {
+            background: rgba(var(--primary-rgb), 0.2);
+            color: var(--primary);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .volume-slider {
+            width: 80px;
+            -webkit-appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border);
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
         }
 
         /* ============= 响应式 ============= */
@@ -593,6 +731,21 @@
             }
             .toc, .toc-toggle {
                 display: none !important;
+            }
+            .music-player {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                border-radius: 30px;
+            }
+            .music-info {
+                max-width: 120px;
+            }
+            .playlist {
+                left: 10px;
+                right: 10px;
+                width: auto;
             }
         }
     </style>
@@ -691,7 +844,58 @@
     <div class="toc-toggle" id="toc-toggle">
         <i class="fas fa-list"></i>
     </div>
-    <div class="toc" id="toc"></div>
+    <div class="toc" id="toc">
+        <div class="toc-header">
+            <span>目录</span>
+            <span class="toc-close" id="toc-close">&times;</span>
+        </div>
+    </div>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+        <div class="music-controls">
+            <button class="music-btn" id="prev-btn">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="music-btn" id="play-btn">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="music-btn" id="next-btn">
+                <i class="fas fa-step-forward"></i>
+            </button>
+        </div>
+        <div class="music-info">
+            <div class="music-title" id="music-title">选择歌曲</div>
+            <div class="music-artist" id="music-artist">播放器</div>
+        </div>
+        <div class="volume-control">
+            <i class="fas fa-volume-up"></i>
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="0.7">
+        </div>
+        <button class="music-btn" id="playlist-btn">
+            <i class="fas fa-list"></i>
+        </button>
+        
+        <div class="playlist" id="playlist">
+            <div class="playlist-item active" data-src="https://music.163.com/song/media/outer/url?id=1398173719.mp3" data-title="千与千寻" data-artist="久石让">
+                千与千寻 - 久石让
+            </div>
+            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=440353010.mp3" data-title="天空之城" data-artist="久石让">
+                天空之城 - 久石让
+            </div>
+            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="Love Story" data-artist="Taylor Swift">
+                Love Story - Taylor Swift
+            </div>
+            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="Ghost Face" data-artist="Killstation">
+                Ghost Face - Killstation
+            </div>
+            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="别怕变老" data-artist="王以太, 艾热">
+                别怕变老 - 王以太, 艾热
+            </div>
+        </div>
+    </div>
+
+    <audio id="audio-player"></audio>
 
     <script>
         // 初始化 marked
@@ -743,6 +947,8 @@
                 const tocToggle = document.getElementById('toc-toggle');
                 if (tocToggle && document.getElementById('reader').style.display === 'block') {
                     tocToggle.style.display = 'flex';
+                } else if (tocToggle) {
+                    tocToggle.style.display = 'none';
                 }
             });
 
@@ -780,16 +986,23 @@
 
             // 目录切换
             const tocToggle = document.getElementById('toc-toggle');
+            const tocClose = document.getElementById('toc-close');
+            const toc = document.getElementById('toc');
+            
             if (tocToggle) {
                 tocToggle.addEventListener('click', () => {
-                    const toc = document.getElementById('toc');
-                    if (toc.style.display === 'block') {
-                        toc.style.display = 'none';
-                    } else {
-                        toc.style.display = 'block';
-                    }
+                    toc.style.display = 'block';
                 });
             }
+            
+            if (tocClose) {
+                tocClose.addEventListener('click', () => {
+                    toc.style.display = 'none';
+                });
+            }
+
+            // 音乐播放器功能
+            initMusicPlayer();
         });
 
         // 设置主题
@@ -829,7 +1042,7 @@
                 return;
             }
             
-            let tocHTML = '<div class="toc-header">目录</div><ul>';
+            let tocHTML = '<div class="toc-header"><span>目录</span><span class="toc-close" id="toc-close">&times;</span></div><ul>';
             let lastLevel = 0;
             
             headings.forEach((heading, index) => {
@@ -859,6 +1072,11 @@
             
             tocHTML += '</ul>';
             toc.innerHTML = tocHTML;
+            
+            // 重新绑定关闭按钮事件
+            document.getElementById('toc-close').addEventListener('click', () => {
+                toc.style.display = 'none';
+            });
         }
 
         // 加载文章
@@ -943,6 +1161,106 @@
             }
             if (postProgressBar) {
                 postProgressBar.style.display = 'none';
+            }
+        }
+
+        // 音乐播放器功能
+        function initMusicPlayer() {
+            const audio = document.getElementById('audio-player');
+            const playBtn = document.getElementById('play-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const playlistBtn = document.getElementById('playlist-btn');
+            const playlist = document.getElementById('playlist');
+            const volumeSlider = document.getElementById('volume-slider');
+            const musicTitle = document.getElementById('music-title');
+            const musicArtist = document.getElementById('music-artist');
+            const playlistItems = document.querySelectorAll('.playlist-item');
+            
+            let currentSongIndex = 0;
+            
+            // 设置初始音量
+            audio.volume = volumeSlider.value;
+            
+            // 播放/暂停
+            playBtn.addEventListener('click', () => {
+                if (audio.paused) {
+                    if (audio.src) {
+                        audio.play();
+                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    } else {
+                        // 如果没有选择歌曲，播放第一首
+                        playSong(0);
+                    }
+                } else {
+                    audio.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            });
+            
+            // 上一首
+            prevBtn.addEventListener('click', () => {
+                currentSongIndex = (currentSongIndex - 1 + playlistItems.length) % playlistItems.length;
+                playSong(currentSongIndex);
+            });
+            
+            // 下一首
+            nextBtn.addEventListener('click', () => {
+                currentSongIndex = (currentSongIndex + 1) % playlistItems.length;
+                playSong(currentSongIndex);
+            });
+            
+            // 显示/隐藏播放列表
+            playlistBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                playlist.style.display = playlist.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            // 点击播放列表外的区域关闭播放列表
+            document.addEventListener('click', (e) => {
+                if (!playlist.contains(e.target) && e.target !== playlistBtn) {
+                    playlist.style.display = 'none';
+                }
+            });
+            
+            // 音量控制
+            volumeSlider.addEventListener('input', () => {
+                audio.volume = volumeSlider.value;
+            });
+            
+            // 播放列表项点击
+            playlistItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    playSong(index);
+                    playlist.style.display = 'none';
+                });
+            });
+            
+            // 歌曲结束自动播放下一首
+            audio.addEventListener('ended', () => {
+                currentSongIndex = (currentSongIndex + 1) % playlistItems.length;
+                playSong(currentSongIndex);
+            });
+            
+            // 播放歌曲函数
+            function playSong(index) {
+                currentSongIndex = index;
+                const song = playlistItems[index];
+                
+                // 更新活动项
+                playlistItems.forEach(item => item.classList.remove('active'));
+                song.classList.add('active');
+                
+                // 设置音频源
+                audio.src = song.getAttribute('data-src');
+                audio.play();
+                
+                // 更新信息
+                musicTitle.textContent = song.getAttribute('data-title');
+                musicArtist.textContent = song.getAttribute('data-artist');
+                
+                // 更新按钮状态
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }
         }
     </script>
