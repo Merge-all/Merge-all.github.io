@@ -6,7 +6,7 @@
   <meta name="description" content="Merge-all 的算法博客，分享构造题、DP 优化、图论与思维题解法" />
   <title>Merge-all's Blog</title>
 
-  <!-- 字体：优雅手写体 + 衬线标题 + 现代无衬线正文 -->
+  <!-- 字体 -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
 
@@ -52,7 +52,6 @@
       --accent: linear-gradient(135deg, #6f42c1, #d63384);
     }
 
-    /* 暗色模式（全局） */
     [data-theme="dark"] {
       --text: #e0e0e0;
       --text-light: #aaa;
@@ -73,7 +72,7 @@
       min-height: 100vh;
     }
 
-    /* ============= 顶部进度条（渐变流动） ============= */
+    /* ============= 顶部进度条 ============= */
     #reading-progress {
       position: fixed;
       top: 0; left: 0;
@@ -85,7 +84,7 @@
       box-shadow: 0 0 10px rgba(111, 66, 193, 0.5);
     }
 
-    /* ============= 顶部导航（毛玻璃） ============= */
+    /* ============= 顶部导航 ============= */
     .header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -185,7 +184,6 @@
       font-size: 3.8em;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 16px;
       background: var(--accent);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -298,7 +296,7 @@
       cursor: pointer;
       font-family: inherit;
       font-size: 1.1em;
-      margin-bottom: 60px;
+      margin-bottom: 20px;
       box-shadow: 0 10px 30px rgba(214, 51, 132, 0.3);
       transition: var(--transition);
       display: inline-flex;
@@ -309,6 +307,46 @@
     #reader button:hover {
       transform: translateY(-3px);
       box-shadow: 0 15px 40px rgba(214, 51, 132, 0.4);
+    }
+
+    #back-to-top {
+      display: inline-flex;
+      margin-left: 12px;
+      background: #6c757d;
+    }
+
+    #back-to-top:hover {
+      background: #5a6268;
+    }
+
+    #toc {
+      margin: 20px 0 30px;
+      padding: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.95em;
+      color: var(--text-light);
+    }
+
+    #toc h3 {
+      margin: 0 0 12px;
+      color: var(--text);
+    }
+
+    #toc ul {
+      margin: 0;
+      padding-left: 1.2em;
+    }
+
+    #toc a {
+      color: var(--text-light);
+      text-decoration: none;
+    }
+
+    #toc a:hover {
+      color: var(--primary);
+      text-decoration: underline;
     }
 
     #reader-content {
@@ -322,7 +360,7 @@
       opacity: 1;
     }
 
-    /* ============= 骨架屏（加载中） ============= */
+    /* ============= 骨架屏 ============= */
     .skeleton {
       background: linear-gradient(90deg, #f0f0f0, #e0e0e0, #f0f0f0);
       background-size: 300% 100%;
@@ -335,53 +373,40 @@
       100% { background-position: 300% 0; }
     }
 
-    .skeleton-title {
-      height: 32px;
-      width: 80%;
-      margin: 0 auto 20px;
-    }
+    .skeleton-title { height: 32px; width: 80%; margin: 0 auto 20px; }
+    .skeleton-para { height: 18px; width: 100%; margin-bottom: 12px; }
 
-    .skeleton-para {
-      height: 18px;
-      width: 100%;
-      margin-bottom: 12px;
-    }
-
-    /* ============= 链接样式 ============= */
-    a {
-      color: var(--text) !important;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* ============= 列表样式 ============= */
-    ul, ol {
+    /* ============= 列表样式（完全手动控制） ============= */
+    ol.clean, ul.clean {
       margin: 1.4em 0;
       padding-left: 1.8em;
     }
 
-    ul > li::before {
-      content: "•";
-      color: var(--text);
-      margin-right: 0.7em;
-      font-weight: normal;
+    ol.clean > li {
+      list-style: none;
+      position: relative;
+      padding-left: 0.2em;
     }
 
-    ol {
-      counter-reset: item;
-    }
-
-    ol > li {
-      counter-increment: item;
-    }
-
-    ol > li::before {
+    ol.clean > li::before {
       content: counter(item) ".";
-      margin-right: 0.7em;
+      counter-increment: item;
+      position: absolute;
+      left: -1.6em;
+      width: 1.4em;
+      color: var(--text);
+    }
+
+    ul.clean > li {
+      list-style: none;
+      position: relative;
+      padding-left: 0.2em;
+    }
+
+    ul.clean > li::before {
+      content: "•";
+      position: absolute;
+      left: -1em;
       color: var(--text);
     }
 
@@ -427,7 +452,6 @@
       padding: 4px 8px;
       border-radius: 6px;
       font-weight: bold;
-      letter-spacing: 0.5px;
     }
 
     /* ============= 图片 ============= */
@@ -438,11 +462,6 @@
       border-radius: 12px;
       border: 1px solid var(--border);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      transition: transform 0.3s ease;
-    }
-
-    #reader-content img:hover {
-      transform: scale(1.03);
     }
 
     /* ============= 响应式 ============= */
@@ -461,10 +480,8 @@
 </head>
 <body>
 
-  <!-- 顶部进度条 -->
   <div id="reading-progress"></div>
 
-  <!-- 顶部导航 -->
   <header class="header">
     <a href="/" class="logo">Merge-all</a>
     <nav class="nav-links">
@@ -476,7 +493,6 @@
     </nav>
   </header>
 
-  <!-- 主内容 -->
   <div class="container">
     <div class="title">
       <h1>My Blog</h1>
@@ -486,148 +502,209 @@
     <div class="posts">
       <article class="post">
         <div class="post-header">
-          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md')">
-            构造专练
-          </h2>
+          <h2 class="post-title" onclick="loadPost('construct')">构造专练</h2>
           <div class="post-meta">
             <div class="post-meta-item"><i class="far fa-calendar"></i><span>2025-08-11</span></div>
             <div class="post-meta-item"><i class="far fa-clock"></i><span>5 min read</span></div>
             <div class="post-meta-item"><i class="fas fa-code"></i><span>构造 / 图论 / 贪心</span></div>
           </div>
         </div>
-        <div class="post-excerpt">
-          构造太菜了，多多练习涨涨脑子。
-        </div>
+        <div class="post-excerpt">构造太菜了，多多练习涨涨脑子。</div>
       </article>
 
       <article class="post">
         <div class="post-header">
-          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md')">
-            决策性 DP
-          </h2>
+          <h2 class="post-title" onclick="loadPost('quad')">决策性 DP</h2>
           <div class="post-meta">
             <div class="post-meta-item"><i class="far fa-calendar"></i><span>2025-08-16</span></div>
             <div class="post-meta-item"><i class="far fa-clock"></i><span>5 min read</span></div>
             <div class="post-meta-item"><i class="fas fa-chart-line"></i><span>DP / 四边形不等式</span></div>
           </div>
         </div>
-        <div class="post-excerpt">
-          四边形不等式与决策单调性优化。
-        </div>
+        <div class="post-excerpt">四边形不等式与决策单调性优化。</div>
       </article>
     </div>
   </div>
 
-  <!-- 阅读器 -->
   <div id="reader">
-    <button onclick="closeReader()">
-      <i class="fas fa-arrow-left"></i> Back
-    </button>
+    <button onclick="closeReader()"><i class="fas fa-arrow-left"></i> Back</button>
+    <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i> Top</button>
+    <div id="toc"></div>
     <div id="reader-content"></div>
   </div>
 
-  <!-- 脚本 -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      marked.setOptions({
-        gfm: true,
-        breaks: true,
-        smartLists: true,
-        smartypants: true,
-        highlight: (code, lang) => {
-          const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
-          return hljs.highlight(code, { language: validLang }).value;
-        }
-      });
+    // 手动内联文章内容（避免外部加载 + 可完全控制格式）
+    const posts = {
+      construct: `
+        <h1>构造专练</h1>
+        <p>构造太菜了，多多练习涨涨脑子。</p>
 
-      // 进度条
-      window.addEventListener('scroll', () => {
-        const total = document.body.scrollHeight - window.innerHeight;
-        const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
-        document.getElementById('reading-progress').style.width = `${Math.min(progress, 100)}%`;
-      });
+        <h2><a href="https://www.luogu.com.cn/problem/P3557" target="_blank">[POI 2013] GRA-Tower Defense Game</a></h2>
+        <p>一道水绿，一看是还以为攻击距离为 2 是指只能打到相距为 2 的点，画了一下样例以后发现不就是在一开始的基础上多走一步吗。</p>
 
-      // 导航栏压缩
-      window.addEventListener('scroll', () => {
-        document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
-      });
+        <ul class="clean">
+          <li>发现：或许在攻击距离为 1 的时候要好好考虑一下分配，可是当你发现攻击距离为 2 的话，随便怎么搞都一定不劣</li>
+          <li>我们发现可以考虑去枚举当前加入的点 i 所在段的位置 j-1, j，然后通过前面发现的规律计算出最小值即可。</li>
+        </ul>
 
-      // 文章渐显
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.post').forEach(el => observer.observe(el));
+        <pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+const int N = 5e5 + 10;
+int n, m, k, cnt;
+vector<int> G[N], ans;
+bool vis[N];
+void cover(int x) {
+	for(int y : G[x]) {
+		vis[y] = 1;
+		for(int z : G[y])
+			vis[z] = 1;
+	}
+}
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cin >> n >> m >> k;
+	for(int i = 1, u, v; i <= m; i ++) {
+		cin >> u >> v;
+		G[u].emplace_back(v), G[v].emplace_back(u);
+	}
+	for(int i = 1; i <= n; i ++) {
+		if(!vis[i]) {
+			vis[i] = true;
+			cover(i);
+			ans.emplace_back(i);
+		}
+	}
+	cout << ans.size() << '\n';
+	for(int it : ans) cout << it << ' ';
+	return cout << '\n', 0;
+}
+</code></pre>
 
-      // 快捷键
-      window.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && document.getElementById('reader').style.display === 'block') {
-          closeReader();
-        }
-      });
+        <h2><a href="https://www.luogu.com.cn/problem/P1268" target="_blank">树的重量</a></h2>
+        <p>神仙题，这道题让我知道了<strong>画图找规律</strong>的重要性。</p>
 
-      // 主题初始化
-      if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        setDark();
-      } else {
-        setLight();
+        <ol class="clean">
+          <li>n = 2 的情况：显然 $G_{1, 2}$。</li>
+          <li>n = 3 的情况：答案是蓝色段长度，$l = \\frac{G_{1,3} + G_{2,3} - G_{1,2}}{2}$</li>
+          <li>n = 4 的情况：枚举点所在段，取最小值。</li>
+        </ol>
+
+        <pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+const int N = 110;
+int n, G[N][N], ans;
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cin >> n;
+	for(int i = 1; i < n; i ++)
+		for(int j = i + 1; j <= n; j ++)
+			cin >> G[i][j];
+	ans = G[1][2];
+	for(int i = 3, minv; i <= n; i ++) {
+		minv = 0x3f3f3f3f;
+		for(int j = 2; j < i; j ++) minv = min(minv, G[1][i] + G[j][i] - G[1][j] >> 1);
+		ans += minv;
+	}
+	return cout << ans << '\n', 0;
+}
+</code></pre>
+      `,
+
+      quad: `
+        <h1>四边形不等式</h1>
+
+        <ol class="clean">
+          <li>定义1：在定义域上 $\\forall a \\le b \\le c \\le d \\in Z$，有 $w_{a, d} + w_{b, c} \\le w_{a, c} + w_{b, d}$，则称二元函数 $w$ 满足四边形不等式。</li>
+          <li>定义2：在定义域上 $\\forall a < b \\in Z$ 都有 $a < a+1 \\le b < b+1$，有 $w_{a,b+1} + w_{a+1,b} \\le w_{a,b} + w_{a+1,b+1}$，则称二元函数 $w$ 满足四边形不等式。</li>
+        </ol>
+
+        <p>定义1 和定义2 是等价的。</p>
+
+        <ul class="clean">
+          <li>定义1 通常是推单调性，定义2 通常来证明这个函数具有四边形不等式性质。</li>
+        </ul>
+
+        <h2>优化 dp</h2>
+        <p>当 dp 的转移式满足：$\\displaystyle f_i = \\min_{0 \\leq j < i} \\{ f_j + v_{j,i} \\}$，且 $v_{j, i}$ 满足四边形不等式，则 $f_i$ 的最优决策具有单调性。</p>
+        <p>$P_i$ 表示 $f_i$ 取到的最优解的 $j$，则 $P_i$ 单调不降。</p>
+
+        <ul class="clean">
+          <li>若 $p$ 对于 $i$ 比 $p$ 前面的所有决策都更优，则 $p$ 对于 $\\forall i' > i$ 都有 $p$ 比前面的所有决策更优。</li>
+        </ul>
+
+        <p>证明：</p>
+        $$
+        0 \\leq j < p < i < i'
+        $$
+        $$
+        f_p + v_{p, i} \\leq f_j + v_{j, i}
+        $$
+        $$
+        v_{j, i'} + v_{p, i} \\ge v_{j, i} + v_{p, i'}
+        $$
+        $$
+        v_{p, i'} - v_{p, i} \\leq v_{j, i'} - v_{j, i}
+        $$
+        $$
+        f_p + v_{p, i'} \\le f_j + v_{j, i'}
+        $$
+      `
+    };
+
+    // 生成目录
+    function generateTOC(html) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const headings = doc.querySelectorAll('h1, h2, h3');
+      let tocHTML = '<h3>文章目录</h3><ul>';
+      for (let h of headings) {
+        const level = parseInt(h.tagName[1]);
+        const text = h.textContent;
+        const id = text.replace(/\\s+/g, '-').toLowerCase();
+        h.id = id;
+        tocHTML += `<li style="margin-left:${(level-1)*16}px"><a href="#${id}">${text}</a></li>`;
       }
-    });
+      tocHTML += '</ul>';
+      return tocHTML;
+    }
 
-    // 缓存
-    const postCache = {};
-
-    async function loadPost(url) {
+    // 加载文章
+    async function loadPost(key) {
       const reader = document.getElementById('reader');
       const contentEl = document.getElementById('reader-content');
+      const tocEl = document.getElementById('toc');
 
       reader.style.display = 'block';
       window.scrollTo(0, 0);
       contentEl.innerHTML = `
         <div class="skeleton skeleton-title"></div>
         <div class="skeleton skeleton-para"></div>
-        <div class="skeleton skeleton-para" style="width: 80%"></div>
-        <div class="skeleton skeleton-para" style="width: 60%"></div>
+        <div class="skeleton skeleton-para" style="width:80%"></div>
       `;
+      tocEl.innerHTML = '';
 
-      if (postCache[url]) {
-        contentEl.innerHTML = postCache[url];
-        MathJax.typeset([contentEl]);
-        return;
-      }
-
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(res.status);
-        const md = await res.text();
-
-        // 修复 Markdown 中的重复序号问题
-        const cleanMd = md
-          .replace(/(\d+\.\s)(\d+\.\s)/g, '$1') // 修复 1. 1. → 1.
-          .replace(/(\-\s)(·\s)/g, '$1')       // 修复 - · → -
-          .replace(/\n\n+/g, '\n\n');         // 清理多余空行
-
-        const html = marked.parse(cleanMd);
-        postCache[url] = html;
+      setTimeout(() => {
+        const html = posts[key];
         contentEl.innerHTML = html;
+        tocEl.innerHTML = generateTOC(html);
 
-        // 添加语言标签
+        // 高亮代码
         contentEl.querySelectorAll('pre code').forEach(block => {
           const lang = block.className.replace('language-', '') || 'text';
           const displayName = { cpp: 'C++', python: 'Python', java: 'Java' }[lang] || lang.toUpperCase();
-
           const langTag = document.createElement('div');
           langTag.className = 'lang-tag';
           langTag.textContent = displayName;
           block.parentNode.style.position = 'relative';
           block.parentNode.insertBefore(langTag, block);
-
           hljs.highlightElement(block);
         });
 
         MathJax.typeset([contentEl]);
-      } catch (err) {
-        contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
-      }
+      }, 100);
     }
 
     function closeReader() {
@@ -656,6 +733,26 @@
       document.querySelector('.theme-toggle i').className = 'fas fa-moon';
       document.getElementById('hljs-theme-link').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
     }
+
+    // 主题初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        setDark();
+      } else {
+        setLight();
+      }
+
+      window.addEventListener('scroll', () => {
+        const total = document.body.scrollHeight - window.innerHeight;
+        const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
+        document.getElementById('reading-progress').style.width = `${Math.min(progress, 100)}%`;
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.post').forEach(el => observer.observe(el));
+    });
   </script>
 </body>
 </html>
