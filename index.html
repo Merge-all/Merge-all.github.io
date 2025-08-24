@@ -64,22 +64,6 @@
       100% { opacity: 0.6; }
     }
 
-    /* 鼠标光晕 */
-    .cursor-glow {
-      position: fixed;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      box-shadow: 0 0 40px 20px rgba(255,255,255,0.15);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 1;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      mix-blend-mode: screen;
-    }
-
     /* 玻璃卡片 */
     .glass-card {
       background: rgba(255, 255, 255, 0.12);
@@ -101,7 +85,6 @@
       position: relative;
       z-index: 2;
       cursor: default;
-      overflow: hidden;
     }
 
     /* 卡片光扫特效 */
@@ -128,66 +111,29 @@
 
     /* 标题容器 */
     .title-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
       margin: 0 0 20px 0;
-      position: relative;
-      transform-style: preserve-3d;
-      perspective: 1000px;
+      text-align: center;
     }
 
-    /* 主标题 */
+    /* 主标题：清晰、发光、不模糊 */
     h1 {
       margin: 0;
       font-size: 3.6em;
       font-weight: 800;
       letter-spacing: 4px;
+      color: white;
       text-shadow: 
         0 0 15px rgba(255,255,255,0.9),
-        0 0 30px rgba(255,110,220,0.7),
-        0 0 60px rgba(255,110,220,0.4);
-      animation: 
-        pulse 3s ease-in-out infinite alternate,
-        colorShift 8s linear infinite;
-      background: linear-gradient(90deg, #ff6edc, #b387ff, #6ecfff, #ffdd99);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
+        0 0 30px rgba(255,110,220,0.8),
+        0 0 60px rgba(255,110,220,0.5);
+      animation: pulse 3s ease-in-out infinite alternate;
       display: inline-block;
-      transform: translateZ(20px);
       filter: drop-shadow(0 0 10px rgba(255,110,220,0.5));
     }
 
     @keyframes pulse {
       0% { text-shadow: 0 0 10px rgba(255,255,255,0.6), 0 0 20px rgba(255,110,220,0.4); }
       100% { text-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,110,220,0.6), 0 0 60px rgba(255,110,220,0.4); }
-    }
-
-    @keyframes colorShift {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
-    }
-
-    /* 花纹 */
-    .flourish {
-      font-size: 1.8em;
-      opacity: 0;
-      animation: appearRotate 1.2s ease-out 0.8s forwards;
-    }
-
-    .flourish svg {
-      width: 45px;
-      height: 45px;
-      filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
-      animation: pulseGlow 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes pulseGlow {
-      0% { filter: drop-shadow(0 0 6px rgba(200, 255, 255, 0.5)); }
-      100% { filter: drop-shadow(0 0 14px rgba(255, 200, 255, 0.8)); }
     }
 
     /* 引用文字 */
@@ -206,7 +152,7 @@
       transform: translateY(0);
     }
 
-    /* 按钮：强制跳转 */
+    /* 跳转按钮 */
     a.jump-button {
       display: inline-block;
       margin-top: 40px;
@@ -224,8 +170,6 @@
         0 0 15px rgba(255,255,255,0.1);
       transition: all 0.3s ease;
       letter-spacing: 1px;
-      position: relative;
-      overflow: hidden;
       cursor: pointer;
     }
 
@@ -243,37 +187,20 @@
   <!-- 背景呼吸光 -->
   <div class="bg-glow"></div>
 
-  <!-- 鼠标光晕 -->
-  <div class="cursor-glow" id="cursorGlow"></div>
-
-  <!-- 飘落花瓣 -->
-  <div class="petals" id="petals"></div>
-
   <!-- 点击特效容器 -->
   <div id="clickEffect" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3;"></div>
 
+  <!-- 玻璃卡片 -->
   <div class="glass-card" id="card">
     <div class="title-container" id="title">
-      <div class="flourish left">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 10 C60 20, 70 30, 65 45 C60 60, 40 60, 35 45 C30 30, 40 20, 50 10 Z" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
-          <circle cx="50" cy="30" r="3" fill="#ff6edc"/>
-        </svg>
-      </div>
       <h1>Merge-all</h1>
-      <div class="flourish right">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 10 C60 20, 70 30, 65 45 C60 60, 40 60, 35 45 C30 30, 40 20, 50 10 Z" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
-          <circle cx="50" cy="30" r="3" fill="#b387ff"/>
-        </svg>
-      </div>
     </div>
 
     <p class="quote">那是显示于脑海中最后的C级浪漫</p>
     <p class="quote">许下最终的愿望</p>
     <p class="quote">你说星星美丽耀眼，可是它比不上你的笑脸</p>
 
-    <!-- ✅ 关键：使用 onclick 强制跳转 -->
+    <!-- 跳转按钮 -->
     <a class="jump-button" onclick="location.href='/blogs/'; return false;">
       前往 Merge-all 博客
     </a>
@@ -285,7 +212,7 @@
   <!-- particles.js -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
-    // 粒子系统（保持视觉效果）
+    // 粒子系统
     particlesJS('particles', {
       "particles": {
         "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -330,14 +257,6 @@
       "retina_detect": true
     });
 
-    // 鼠标光晕
-    const glow = document.getElementById('cursorGlow');
-    document.addEventListener('mousemove', (e) => {
-      glow.style.left = e.clientX + 'px';
-      glow.style.top = e.clientY + 'px';
-      glow.style.opacity = 0.7;
-    });
-
     // 背景视差
     document.addEventListener('mousemove', (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 10;
@@ -361,21 +280,7 @@
       title.style.transform = 'rotateX(0) rotateY(0)';
     });
 
-    // 飘落花瓣
-    const petals = document.getElementById('petals');
-    const symbols = ['💻', '🔧', '🚀', '🌟', '⚡', '🌐', '🔍', '📚'];
-    setInterval(() => {
-      const petal = document.createElement('div');
-      petal.className = 'petal';
-      petal.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = 15 + Math.random() * 20 + 's';
-      petal.style.opacity = 0.6 + Math.random() * 0.4;
-      petals.appendChild(petal);
-      setTimeout(() => petals.removeChild(petal), 30000);
-    }, 800);
-
-    // 点击星光
+    // 点击星光特效
     const effect = document.getElementById('clickEffect');
     document.addEventListener('click', (e) => {
       for (let i = 0; i < 12; i++) {
@@ -404,7 +309,7 @@
       }
     });
 
-    // 文字浮现
+    // 文字逐行浮现
     document.querySelectorAll('.quote').forEach((p, index) => {
       setTimeout(() => {
         p.classList.add('show');
