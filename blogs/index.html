@@ -73,7 +73,7 @@
       min-height: 100vh;
     }
 
-    /* ============= 顶部进度条（渐变流动效果） ============= */
+    /* ============= 顶部进度条（渐变流动） ============= */
     #reading-progress {
       position: fixed;
       top: 0; left: 0;
@@ -85,7 +85,7 @@
       box-shadow: 0 0 10px rgba(111, 66, 193, 0.5);
     }
 
-    /* ============= 顶部导航（毛玻璃 + 动态边框） ============= */
+    /* ============= 顶部导航（毛玻璃） ============= */
     .header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -106,14 +106,12 @@
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     }
 
-    /* Logo：优雅手写体 + 光晕动效 */
     .logo {
       font-family: 'Great Vibes', cursive;
       font-size: 2.6em;
       color: var(--primary);
       text-decoration: none;
       letter-spacing: -1px;
-      position: relative;
     }
 
     .logo::after {
@@ -125,10 +123,6 @@
       height: 2px;
       background: var(--primary);
       transition: width 0.5s ease;
-    }
-
-    .logo:hover {
-      text-shadow: 0 0 15px rgba(214, 51, 132, 0.4);
     }
 
     .logo:hover::after {
@@ -192,7 +186,6 @@
       font-weight: 700;
       text-align: center;
       margin-bottom: 16px;
-      color: var(--text);
       background: var(--accent);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -222,10 +215,9 @@
       border: 1px solid var(--border);
       overflow: hidden;
       transition: var(--transition);
-      position: relative;
       opacity: 0;
       transform: translateY(24px);
-      will-change: transform, box-shadow;
+      will-change: transform;
     }
 
     .post.visible {
@@ -238,11 +230,9 @@
       box-shadow: var(--shadow-hover);
     }
 
-    /* 标题区域增强 */
     .post-header {
       padding: 36px 36px 24px;
       border-bottom: 1px solid var(--border);
-      position: relative;
     }
 
     .post-title {
@@ -267,7 +257,6 @@
       gap: 18px;
       color: var(--text-light);
       font-size: 0.95em;
-      margin-top: 8px;
     }
 
     .post-meta-item {
@@ -333,16 +322,40 @@
       opacity: 1;
     }
 
+    /* ============= 骨架屏（加载中） ============= */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0, #e0e0e0, #f0f0f0);
+      background-size: 300% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 6px;
+    }
+
+    @keyframes loading {
+      0% { background-position: -300% 0; }
+      100% { background-position: 300% 0; }
+    }
+
+    .skeleton-title {
+      height: 32px;
+      width: 80%;
+      margin: 0 auto 20px;
+    }
+
+    .skeleton-para {
+      height: 18px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
     /* ============= 链接样式 ============= */
     a {
       color: var(--text) !important;
       text-decoration: none;
       cursor: pointer;
-      position: relative;
     }
 
     a:hover {
-      text-decoration: none;
+      text-decoration: underline;
     }
 
     /* ============= 列表样式 ============= */
@@ -520,6 +533,7 @@
         gfm: true,
         breaks: true,
         smartLists: true,
+        smartypants: true,
         highlight: (code, lang) => {
           const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
           return hljs.highlight(code, { language: validLang }).value;
@@ -568,7 +582,12 @@
 
       reader.style.display = 'block';
       window.scrollTo(0, 0);
-      contentEl.innerHTML = '<p style="text-align:center; color:var(--text-light); font-size:1.1em">✨ 加载中……</p>';
+      contentEl.innerHTML = `
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-para"></div>
+        <div class="skeleton skeleton-para" style="width: 80%"></div>
+        <div class="skeleton skeleton-para" style="width: 60%"></div>
+      `;
 
       if (postCache[url]) {
         contentEl.innerHTML = postCache[url];
@@ -580,7 +599,14 @@
         const res = await fetch(url);
         if (!res.ok) throw new Error(res.status);
         const md = await res.text();
-        const html = marked.parse(md);
+
+        // 修复 Markdown 中的重复序号问题
+        const cleanMd = md
+          .replace(/(\d+\.\s)(\d+\.\s)/g, '$1') // 修复 1. 1. → 1.
+          .replace(/(\-\s)(·\s)/g, '$1')       // 修复 - · → -
+          .replace(/\n\n+/g, '\n\n');         // 清理多余空行
+
+        const html = marked.parse(cleanMd);
         postCache[url] = html;
         contentEl.innerHTML = html;
 
@@ -600,7 +626,7 @@
 
         MathJax.typeset([contentEl]);
       } catch (err) {
-        contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败</p>`;
+        contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
       }
     }
 
