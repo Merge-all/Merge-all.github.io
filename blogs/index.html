@@ -50,6 +50,7 @@
       --radius: 16px;
       --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       --accent: linear-gradient(135deg, #6f42c1, #d63384);
+      --nav-width: 300px;
     }
 
     [data-theme="dark"] {
@@ -319,45 +320,47 @@
       background: #5a6268;
     }
 
-    #toc {
-      margin: 20px 0 30px;
-      padding: 16px;
+    /* ============= 侧边锚点导航（悬浮 + 快速跳转） ============= */
+    .anchor-nav {
+      position: fixed;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      font-size: 0.95em;
-      color: var(--text-light);
-    }
-
-    #toc h3 {
-      margin: 0 0 12px;
-      color: var(--text);
-    }
-
-    #toc ul {
-      margin: 0;
-      padding-left: 1.2em;
-    }
-
-    #toc a {
-      color: var(--text-light);
-      text-decoration: none;
-    }
-
-    #toc a:hover {
-      color: var(--primary);
-      text-decoration: underline;
-    }
-
-    #reader-content {
-      max-width: 900px;
-      margin: 0 auto;
+      padding: 12px 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      z-index: 900;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      width: 180px;
     }
 
-    #reader-content.fade-in {
+    .anchor-nav.show {
       opacity: 1;
+      pointer-events: auto;
+    }
+
+    .anchor-nav a {
+      display: block;
+      padding: 6px 16px;
+      color: var(--text-light) !important;
+      text-decoration: none;
+      font-size: 0.9em;
+      transition: var(--transition);
+    }
+
+    .anchor-nav a:hover {
+      color: var(--primary) !important;
+      background: color-mix(in srgb, var(--card), var(--primary) 10%);
+      border-radius: 6px;
+    }
+
+    .anchor-nav a.active {
+      color: var(--primary) !important;
+      font-weight: 600;
     }
 
     /* ============= 骨架屏 ============= */
@@ -464,24 +467,37 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
+    /* ============= 光标跟随特效 ============= */
+    .cursor-fx {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: rgba(214, 51, 132, 0.2);
+      border-radius: 50%;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      transition: transform 0.1s ease;
+    }
+
     /* ============= 响应式 ============= */
-    @media (max-width: 768px) {
-      .header { padding: 16px 20px; }
-      .logo { font-size: 2.2em; }
-      .nav-links { gap: 20px; }
-      .container { margin-top: 120px; padding: 0 20px; }
-      .title h1 { font-size: 2.8em; }
-      .post-title { font-size: 1.7em; }
-      .post-header, .post-excerpt { padding: 28px; }
-      .post-meta { gap: 14px; }
+    @media (max-width: 900px) {
+      .anchor-nav { display: none; }
+      .container, #reader { padding: 0 20px; }
       #reader { padding: 100px 20px 60px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- 光标特效 -->
+  <div class="cursor-fx" id="cursor"></div>
+
+  <!-- 顶部进度条 -->
   <div id="reading-progress"></div>
 
+  <!-- 顶部导航 -->
   <header class="header">
     <a href="/" class="logo">Merge-all</a>
     <nav class="nav-links">
@@ -493,6 +509,7 @@
     </nav>
   </header>
 
+  <!-- 主内容 -->
   <div class="container">
     <div class="title">
       <h1>My Blog</h1>
@@ -526,21 +543,24 @@
     </div>
   </div>
 
+  <!-- 阅读器 -->
   <div id="reader">
     <button onclick="closeReader()"><i class="fas fa-arrow-left"></i> Back</button>
     <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i> Top</button>
-    <div id="toc"></div>
     <div id="reader-content"></div>
   </div>
 
+  <!-- 侧边锚点导航 -->
+  <nav class="anchor-nav" id="anchor-nav"></nav>
+
   <script>
-    // 手动内联文章内容（避免外部加载 + 可完全控制格式）
+    // 内联文章内容（完全控制格式，避免重复符号）
     const posts = {
       construct: `
-        <h1>构造专练</h1>
+        <h1 id="title">构造专练</h1>
         <p>构造太菜了，多多练习涨涨脑子。</p>
 
-        <h2><a href="https://www.luogu.com.cn/problem/P3557" target="_blank">[POI 2013] GRA-Tower Defense Game</a></h2>
+        <h2 id="poi">[POI 2013] GRA-Tower Defense Game</h2>
         <p>一道水绿，一看是还以为攻击距离为 2 是指只能打到相距为 2 的点，画了一下样例以后发现不就是在一开始的基础上多走一步吗。</p>
 
         <ul class="clean">
@@ -582,7 +602,7 @@ int main() {
 }
 </code></pre>
 
-        <h2><a href="https://www.luogu.com.cn/problem/P1268" target="_blank">树的重量</a></h2>
+        <h2 id="tree">树的重量</h2>
         <p>神仙题，这道题让我知道了<strong>画图找规律</strong>的重要性。</p>
 
         <ol class="clean">
@@ -614,7 +634,7 @@ int main() {
       `,
 
       quad: `
-        <h1>四边形不等式</h1>
+        <h1 id="title">四边形不等式</h1>
 
         <ol class="clean">
           <li>定义1：在定义域上 $\\forall a \\le b \\le c \\le d \\in Z$，有 $w_{a, d} + w_{b, c} \\le w_{a, c} + w_{b, d}$，则称二元函数 $w$ 满足四边形不等式。</li>
@@ -627,7 +647,7 @@ int main() {
           <li>定义1 通常是推单调性，定义2 通常来证明这个函数具有四边形不等式性质。</li>
         </ul>
 
-        <h2>优化 dp</h2>
+        <h2 id="dp-opt">优化 dp</h2>
         <p>当 dp 的转移式满足：$\\displaystyle f_i = \\min_{0 \\leq j < i} \\{ f_j + v_{j,i} \\}$，且 $v_{j, i}$ 满足四边形不等式，则 $f_i$ 的最优决策具有单调性。</p>
         <p>$P_i$ 表示 $f_i$ 取到的最优解的 $j$，则 $P_i$ 单调不降。</p>
 
@@ -654,28 +674,51 @@ int main() {
       `
     };
 
-    // 生成目录
-    function generateTOC(html) {
+    // 生成侧边锚点导航
+    function generateAnchors(html) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
       const headings = doc.querySelectorAll('h1, h2, h3');
-      let tocHTML = '<h3>文章目录</h3><ul>';
-      for (let h of headings) {
+      const nav = document.getElementById('anchor-nav');
+      nav.innerHTML = '';
+
+      headings.forEach(h => {
+        if (!h.id) return;
         const level = parseInt(h.tagName[1]);
-        const text = h.textContent;
-        const id = text.replace(/\\s+/g, '-').toLowerCase();
-        h.id = id;
-        tocHTML += `<li style="margin-left:${(level-1)*16}px"><a href="#${id}">${text}</a></li>`;
-      }
-      tocHTML += '</ul>';
-      return tocHTML;
+        const a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        a.style.paddingLeft = (level - 1) * 12 + 'px';
+        nav.appendChild(a);
+      });
+
+      nav.classList.add('show');
+    }
+
+    // 滚动时激活对应锚点
+    function activateAnchors() {
+      const nav = document.getElementById('anchor-nav');
+      const links = nav.querySelectorAll('a');
+      const scrollPos = window.scrollY + 100;
+
+      links.forEach(a => {
+        a.classList.remove('active');
+        const target = document.querySelector(a.hash);
+        if (target) {
+          const top = target.offsetTop;
+          const height = target.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            a.classList.add('active');
+          }
+        }
+      });
     }
 
     // 加载文章
     async function loadPost(key) {
       const reader = document.getElementById('reader');
       const contentEl = document.getElementById('reader-content');
-      const tocEl = document.getElementById('toc');
+      const anchorNav = document.getElementById('anchor-nav');
 
       reader.style.display = 'block';
       window.scrollTo(0, 0);
@@ -684,12 +727,14 @@ int main() {
         <div class="skeleton skeleton-para"></div>
         <div class="skeleton skeleton-para" style="width:80%"></div>
       `;
-      tocEl.innerHTML = '';
+      anchorNav.classList.remove('show');
 
       setTimeout(() => {
         const html = posts[key];
         contentEl.innerHTML = html;
-        tocEl.innerHTML = generateTOC(html);
+
+        // 生成锚点
+        generateAnchors(html);
 
         // 高亮代码
         contentEl.querySelectorAll('pre code').forEach(block => {
@@ -709,6 +754,7 @@ int main() {
 
     function closeReader() {
       document.getElementById('reader').style.display = 'none';
+      document.getElementById('anchor-nav').classList.remove('show');
     }
 
     function toggleTheme() {
@@ -734,6 +780,13 @@ int main() {
       document.getElementById('hljs-theme-link').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
     }
 
+    // 光标跟随
+    document.addEventListener('mousemove', e => {
+      const cursor = document.getElementById('cursor');
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
     // 主题初始化
     document.addEventListener('DOMContentLoaded', () => {
       if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -746,6 +799,7 @@ int main() {
         const total = document.body.scrollHeight - window.innerHeight;
         const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
         document.getElementById('reading-progress').style.width = `${Math.min(progress, 100)}%`;
+        activateAnchors();
       });
 
       const observer = new IntersectionObserver((entries) => {
