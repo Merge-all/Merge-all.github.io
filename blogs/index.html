@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Merge-all's Blog</title>
 
-    <!-- 字体：加入手写夸张体 Great Vibes -->
+    <!-- 字体：手写体 Great Vibes + 衬线/无衬线搭配 -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
@@ -75,7 +75,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* ============= 顶部进度条 ============= */
+        /* 顶部进度条 */
         #reading-progress {
             position: fixed;
             top: 0;
@@ -88,7 +88,7 @@
             box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
         }
 
-        /* ============= 博客内阅读进度条 ============= */
+        /* 博客内阅读进度条 */
         #post-reading-progress {
             position: fixed;
             top: var(--header-height);
@@ -100,7 +100,7 @@
             transition: width 0.1s ease;
         }
 
-        /* ============= 顶部导航 ============= */
+        /* 顶部导航 */
         .header {
             position: fixed;
             top: 0;
@@ -118,11 +118,9 @@
             transition: var(--transition);
         }
 
-        /* Logo：蓝色 + 夸张手写体 */
         .logo {
             font-family: 'Great Vibes', cursive;
             font-size: 2.2em;
-            font-weight: normal;
             color: var(--primary);
             text-decoration: none;
             letter-spacing: -1px;
@@ -171,7 +169,7 @@
             width: 100%;
         }
 
-        /* 主题切换按钮 */
+        /* 主题切换 */
         .theme-toggle {
             background: none;
             border: none;
@@ -181,9 +179,6 @@
             transition: var(--transition);
             padding: 8px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .theme-toggle:hover {
@@ -223,7 +218,7 @@
             color: var(--text-light);
         }
 
-        /* ============= 主内容区域 ============= */
+        /* 主内容 */
         .container {
             max-width: 900px;
             margin: calc(var(--header-height) + 40px) auto 60px;
@@ -251,7 +246,7 @@
             margin: 0 auto;
         }
 
-        /* ============= 博客文章列表 ============= */
+        /* 文章列表 */
         .posts {
             display: grid;
             gap: 30px;
@@ -264,7 +259,6 @@
             overflow: hidden;
             transition: var(--transition);
             border: 1px solid var(--border);
-            position: relative;
         }
 
         .post:hover {
@@ -329,7 +323,7 @@
             font-weight: 600;
         }
 
-        /* ============= 阅读器 ============= */
+        /* 阅读器 */
         #reader {
             display: none;
             position: fixed;
@@ -344,7 +338,6 @@
             z-index: 1000;
         }
 
-        /* 返回按钮 */
         #reader button {
             padding: 12px 28px;
             background: var(--primary);
@@ -370,51 +363,7 @@
             margin: 0 auto;
         }
 
-        /* ============= 关键修复：列表不缩进 ============= */
-        #reader-content ul,
-        #reader-content ol,
-        .post-excerpt ul,
-        .post-excerpt ol {
-            margin-left: 0;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        #reader-content ul > li::before,
-        .post-excerpt ul > li::before {
-            content: "•";
-            margin-right: 0.5em;
-            color: inherit;
-        }
-
-        #reader-content li,
-        .post-excerpt li {
-            margin-left: 0 !important;
-            padding-left: 0 !important;
-            text-indent: 0;
-        }
-
-        /* ============= 链接颜色 ============= */
-        a {
-            text-decoration: none !important;
-            color: var(--text) !important;
-            cursor: pointer;
-        }
-
-        a:hover {
-            color: var(--primary) !important;
-        }
-
-        a[href^="http"] {
-            color: var(--text) !important;
-        }
-
-        a[href^="http"]:hover {
-            color: var(--primary) !important;
-            text-decoration: underline !important;
-        }
-
-        /* ============= 代码块 ============= */
+        /* 代码块：VS Code 风格缩进 */
         pre {
             position: relative;
             background: #1a1a1a;
@@ -432,6 +381,8 @@
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 0.95em;
             color: #e0e0e0;
+            white-space: pre;        /* 保留空格与换行 */
+            tab-size: 4;             /* VS Code 默认缩进 */
         }
 
         /* 复制按钮 */
@@ -478,7 +429,7 @@
             color: var(--primary);
         }
 
-        /* ============= 图片居中 ============= */
+        /* 图片居中 */
         #reader-content img {
             display: block;
             margin: 1em auto;
@@ -486,7 +437,7 @@
             border-radius: 8px;
         }
 
-        /* ============= 目录功能 ============= */
+        /* 目录 */
         .toc {
             position: fixed;
             top: 100px;
@@ -563,7 +514,7 @@
             transform: scale(1.1);
         }
 
-        /* ============= 音乐播放器 ============= */
+        /* 音乐播放器 */
         .music-player {
             position: fixed;
             bottom: 20px;
@@ -595,9 +546,6 @@
             transition: var(--transition);
             padding: 8px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .music-btn:hover {
@@ -682,83 +630,21 @@
             cursor: pointer;
         }
 
-        /* ============= 响应式 ============= */
         @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
-            .logo {
-                font-size: 2em;
-            }
-            .nav-links {
-                gap: 15px;
-            }
-            .search-input {
-                width: 140px;
-            }
-            .search-input:focus {
-                width: 160px;
-            }
-            .container {
-                margin-top: 100px;
-                padding: 0 20px;
-            }
-            .title h1 {
-                font-size: 2.8em;
-            }
-            .title p {
-                font-size: 1.1em;
-            }
-            .post-header, .post-excerpt {
-                padding: 25px;
-            }
-            .post-title {
-                font-size: 1.6em;
-            }
-            #reader {
-                padding: 100px 20px 40px;
-            }
-            #reader button {
-                padding: 10px 24px;
-                font-size: 1em;
-            }
-            .copy-btn {
-                padding: 3px 6px;
-                font-size: 0.7em;
-            }
-            .lang-tag {
-                font-size: 0.7em;
-            }
-            .toc, .toc-toggle {
-                display: none !important;
-            }
-            .music-player {
-                bottom: 10px;
-                left: 10px;
-                right: 10px;
-                width: auto;
-                border-radius: 30px;
-            }
-            .music-info {
-                max-width: 120px;
-            }
-            .playlist {
-                left: 10px;
-                right: 10px;
-                width: auto;
-            }
+            .toc, .toc-toggle { display: none !important; }
+            .music-player { bottom: 10px; left: 10px; right: 10px; width: auto; border-radius: 30px; }
+            .music-info { max-width: 120px; }
+            .playlist { left: 10px; right: 10px; width: auto; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 顶部进度条 -->
+    <!-- 进度条 -->
     <div id="reading-progress"></div>
-
-    <!-- 博客内阅读进度条 -->
     <div id="post-reading-progress"></div>
 
-    <!-- 顶部导航 -->
+    <!-- 导航 -->
     <header class="header">
         <a href="/" class="logo">Merge-all</a>
         <nav class="nav-links">
@@ -802,10 +688,9 @@
                         <span class="post-tag">构造</span>
                     </div>
                 </div>
-                <div class="post-excerpt">
-                    构造太菜了，多多练习涨涨脑子。
-                </div>
+                <div class="post-excerpt">构造太菜了，多多练习涨涨脑子。</div>
             </article>
+
             <article class="post" data-tags="算法 dp 优化">
                 <div class="post-header">
                     <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Inlovexy/Inlovexy.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md')">
@@ -827,9 +712,7 @@
                         <span class="post-tag">优化</span>
                     </div>
                 </div>
-                <div class="post-excerpt">
-                    优化 dp
-                </div>
+                <div class="post-excerpt">优化 dp</div>
             </article>
         </div>
     </div>
@@ -854,15 +737,9 @@
     <!-- 音乐播放器 -->
     <div class="music-player">
         <div class="music-controls">
-            <button class="music-btn" id="prev-btn">
-                <i class="fas fa-step-backward"></i>
-            </button>
-            <button class="music-btn" id="play-btn">
-                <i class="fas fa-play"></i>
-            </button>
-            <button class="music-btn" id="next-btn">
-                <i class="fas fa-step-forward"></i>
-            </button>
+            <button class="music-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
+            <button class="music-btn" id="play-btn"><i class="fas fa-play"></i></button>
+            <button class="music-btn" id="next-btn"><i class="fas fa-step-forward"></i></button>
         </div>
         <div class="music-info">
             <div class="music-title" id="music-title">选择歌曲</div>
@@ -872,24 +749,32 @@
             <i class="fas fa-volume-up"></i>
             <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="0.7">
         </div>
-        <button class="music-btn" id="playlist-btn">
-            <i class="fas fa-list"></i>
-        </button>
-        
+        <button class="music-btn" id="playlist-btn"><i class="fas fa-list"></i></button>
+
         <div class="playlist" id="playlist">
-            <div class="playlist-item active" data-src="https://music.163.com/song/media/outer/url?id=1398173719.mp3" data-title="千与千寻" data-artist="久石让">
+            <div class="playlist-item active"
+                 data-src="https://music.163.com/song/media/outer/url?id=1398173719"
+                 data-title="千与千寻" data-artist="久石让">
                 千与千寻 - 久石让
             </div>
-            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=440353010.mp3" data-title="天空之城" data-artist="久石让">
+            <div class="playlist-item"
+                 data-src="https://music.163.com/song/media/outer/url?id=440353010"
+                 data-title="天空之城" data-artist="久石让">
                 天空之城 - 久石让
             </div>
-            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="Love Story" data-artist="Taylor Swift">
+            <div class="playlist-item"
+                 data-src="https://music.163.com/song/media/outer/url?id=1812019267"
+                 data-title="Love Story" data-artist="Taylor Swift">
                 Love Story - Taylor Swift
             </div>
-            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="Ghost Face" data-artist="Killstation">
+            <div class="playlist-item"
+                 data-src="https://music.163.com/song/media/outer/url?id=1812019267"
+                 data-title="Ghost Face" data-artist="Killstation">
                 Ghost Face - Killstation
             </div>
-            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="别怕变老" data-artist="王以太, 艾热">
+            <div class="playlist-item"
+                 data-src="https://music.163.com/song/media/outer/url?id=1812019267"
+                 data-title="别怕变老" data-artist="王以太, 艾热">
                 别怕变老 - 王以太, 艾热
             </div>
         </div>
@@ -898,16 +783,11 @@
     <audio id="audio-player"></audio>
 
     <script>
-        // 初始化 marked
         document.addEventListener('DOMContentLoaded', () => {
-            // 设置CSS变量
             document.documentElement.style.setProperty('--primary-rgb', '67, 97, 238');
-            
-            // 初始化主题
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme);
-            
-            // 初始化marked
+
             marked.setOptions({
                 gfm: true,
                 breaks: true,
@@ -918,190 +798,105 @@
                 }
             });
 
-            // 页面滚动进度条
             window.addEventListener('scroll', () => {
                 const total = document.body.scrollHeight - window.innerHeight;
                 const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
-                const progressBar = document.getElementById('reading-progress');
-                if (progressBar) {
-                    progressBar.style.width = `${Math.min(progress, 100)}%`;
-                }
-                
-                // 博客内阅读进度条
+                document.getElementById('reading-progress').style.width = `${Math.min(progress, 100)}%`;
+
                 const postProgressBar = document.getElementById('post-reading-progress');
-                if (postProgressBar) {
-                    if (document.getElementById('reader').style.display === 'block') {
-                        const readerContent = document.getElementById('reader-content');
-                        if (readerContent) {
-                            const postTotal = readerContent.scrollHeight - window.innerHeight;
-                            const postProgress = postTotal > 0 ? (window.scrollY / postTotal) * 100 : 0;
-                            postProgressBar.style.width = `${Math.min(postProgress, 100)}%`;
-                            postProgressBar.style.display = 'block';
-                        }
-                    } else {
-                        postProgressBar.style.display = 'none';
-                    }
+                if (postProgressBar && document.getElementById('reader').style.display === 'block') {
+                    const readerContent = document.getElementById('reader-content');
+                    const postTotal = readerContent.scrollHeight - window.innerHeight;
+                    const postProgress = postTotal > 0 ? (window.scrollY / postTotal) * 100 : 0;
+                    postProgressBar.style.width = `${Math.min(postProgress, 100)}%`;
+                    postProgressBar.style.display = 'block';
+                } else if (postProgressBar) {
+                    postProgressBar.style.display = 'none';
                 }
-                
-                // 显示/隐藏目录按钮
+
                 const tocToggle = document.getElementById('toc-toggle');
-                if (tocToggle && document.getElementById('reader').style.display === 'block') {
-                    tocToggle.style.display = 'flex';
-                } else if (tocToggle) {
-                    tocToggle.style.display = 'none';
+                if (tocToggle) {
+                    tocToggle.style.display = document.getElementById('reader').style.display === 'block' ? 'flex' : 'none';
                 }
             });
 
-            // 搜索功能
             const searchInput = document.getElementById('search-input');
             if (searchInput) {
                 searchInput.addEventListener('input', debounce((e) => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const posts = document.querySelectorAll('.post');
-                    
-                    posts.forEach(post => {
+                    const term = e.target.value.toLowerCase();
+                    document.querySelectorAll('.post').forEach(post => {
                         const title = post.querySelector('.post-title').textContent.toLowerCase();
                         const excerpt = post.querySelector('.post-excerpt').textContent.toLowerCase();
                         const tags = post.getAttribute('data-tags').toLowerCase();
-                        
-                        if (title.includes(searchTerm) || excerpt.includes(searchTerm) || tags.includes(searchTerm)) {
-                            post.style.display = 'block';
-                        } else {
-                            post.style.display = 'none';
-                        }
+                        post.style.display = (title.includes(term) || excerpt.includes(term) || tags.includes(term)) ? 'block' : 'none';
                     });
                 }, 300));
             }
 
-            // 主题切换
             const themeToggle = document.getElementById('theme-toggle');
-            if (themeToggle) {
-                themeToggle.addEventListener('click', () => {
-                    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                    setTheme(newTheme);
-                    localStorage.setItem('theme', newTheme);
-                });
-            }
+            themeToggle?.addEventListener('click', () => {
+                const theme = (document.documentElement.getAttribute('data-theme') || 'light') === 'light' ? 'dark' : 'light';
+                setTheme(theme);
+                localStorage.setItem('theme', theme);
+            });
 
-            // 目录切换
             const tocToggle = document.getElementById('toc-toggle');
             const tocClose = document.getElementById('toc-close');
             const toc = document.getElementById('toc');
-            
-            if (tocToggle) {
-                tocToggle.addEventListener('click', () => {
-                    toc.style.display = 'block';
-                });
-            }
-            
-            if (tocClose) {
-                tocClose.addEventListener('click', () => {
-                    toc.style.display = 'none';
-                });
-            }
 
-            // 音乐播放器功能
+            tocToggle?.addEventListener('click', () => { toc.style.display = 'block'; });
+            tocClose?.addEventListener('click', () => { toc.style.display = 'none'; });
+
             initMusicPlayer();
         });
 
-        // 设置主题
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
-            const themeToggle = document.getElementById('theme-toggle');
-            if (themeToggle) {
-                if (theme === 'dark') {
-                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                } else {
-                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                }
-            }
+            const toggle = document.getElementById('theme-toggle');
+            toggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
 
-        // 防抖函数
         function debounce(func, wait) {
             let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
+            return function (...args) {
                 clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
+                timeout = setTimeout(() => func(...args), wait);
             };
         }
 
-        // 生成目录
+        // 仅提取 h1 作为目录项（即文章标题）
         function generateTOC() {
-            const readerContent = document.getElementById('reader-content');
-            const headings = readerContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            const content = document.getElementById('reader-content');
+            const headings = content.querySelectorAll('h1');
             const toc = document.getElementById('toc');
             
             if (headings.length === 0) {
-                toc.innerHTML = '<div class="toc-header">目录</div><p>无标题</p>';
+                toc.innerHTML = '<div class="toc-header"><span>目录</span><span class="toc-close">&times;</span></div><p>无标题</p>';
                 return;
             }
-            
-            let tocHTML = '<div class="toc-header"><span>目录</span><span class="toc-close" id="toc-close">&times;</span></div><ul>';
-            let lastLevel = 0;
-            
-            headings.forEach((heading, index) => {
-                const level = parseInt(heading.tagName.substring(1));
-                const id = `heading-${index}`;
-                heading.id = id;
-                
-                if (level > lastLevel) {
-                    tocHTML += '<ul>';
-                } else if (level < lastLevel) {
-                    tocHTML += '</ul></li>';
-                } else if (index !== 0) {
-                    tocHTML += '</li>';
-                }
-                
-                tocHTML += `<li><a href="#${id}">${heading.textContent}</a>`;
-                lastLevel = level;
+
+            let html = '<div class="toc-header"><span>目录</span><span class="toc-close">&times;</span></div><ul>';
+            headings.forEach((h, idx) => {
+                h.id = `heading-${idx}`;
+                html += `<li><a href="#heading-${idx}">${h.textContent}</a></li>`;
             });
-            
-            // 关闭所有打开的标签
-            for (let i = lastLevel; i > 1; i--) {
-                tocHTML += '</ul></li>';
-            }
-            if (headings.length > 0) {
-                tocHTML += '</li>';
-            }
-            
-            tocHTML += '</ul>';
-            toc.innerHTML = tocHTML;
-            
-            // 重新绑定关闭按钮事件
-            document.getElementById('toc-close').addEventListener('click', () => {
+            html += '</ul>';
+            toc.innerHTML = html;
+
+            document.querySelector('.toc-close')?.addEventListener('click', () => {
                 toc.style.display = 'none';
             });
         }
 
-        // 加载文章
         function loadPost(url) {
             const reader = document.getElementById('reader');
             const contentEl = document.getElementById('reader-content');
-            const tocToggle = document.getElementById('toc-toggle');
-            const postProgressBar = document.getElementById('post-reading-progress');
-
-            if (!contentEl) {
-                console.error('reader-content element not found');
-                return;
-            }
-
             reader.style.display = 'block';
             window.scrollTo(0, 0);
-            contentEl.innerHTML = '<p style="color:#7f8c8d; text-align:center; font-size:1.1em">加载中……</p>';
-            tocToggle.style.display = 'flex';
-            if (postProgressBar) postProgressBar.style.display = 'block';
+            contentEl.innerHTML = '<p style="color:#7f8c8d; text-align:center">加载中……</p>';
 
             fetch(url)
-                .then(res => {
-                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                    return res.text();
-                })
+                .then(res => res.ok ? res.text() : Promise.reject(new Error('加载失败')))
                 .then(md => {
                     contentEl.innerHTML = marked.parse(md);
 
@@ -1111,8 +906,8 @@
                         const displayName = { 'cpp': 'C++', 'python': 'Python', 'java': 'Java' }[lang] || lang.toUpperCase();
 
                         const langTag = document.createElement('div');
-                        langTag.textContent = displayName;
                         langTag.className = 'lang-tag';
+                        langTag.textContent = displayName;
                         block.parentNode.style.position = 'relative';
                         block.parentNode.insertBefore(langTag, block);
 
@@ -1123,8 +918,7 @@
                             navigator.clipboard.writeText(block.textContent).then(() => {
                                 btn.textContent = '✓';
                                 setTimeout(() => btn.textContent = 'COPY', 2000);
-                            }).catch(err => {
-                                console.error('复制失败:', err);
+                            }).catch(() => {
                                 btn.textContent = '✗';
                                 setTimeout(() => btn.textContent = 'COPY', 2000);
                             });
@@ -1134,37 +928,20 @@
                         hljs.highlightElement(block);
                     });
 
-                    // 生成目录
                     generateTOC();
-
-                    // 渲染数学公式
-                    if (window.MathJax) {
-                        MathJax.typesetClear();
-                        MathJax.typeset([contentEl]);
-                    }
+                    if (window.MathJax) MathJax.typeset([contentEl]);
                 })
                 .catch(err => {
-                    console.error('加载失败:', err);
                     contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
                 });
         }
 
         function closeReader() {
-            const reader = document.getElementById('reader');
-            const tocToggle = document.getElementById('toc-toggle');
-            const postProgressBar = document.getElementById('post-reading-progress');
-            if (reader) {
-                reader.style.display = 'none';
-            }
-            if (tocToggle) {
-                tocToggle.style.display = 'none';
-            }
-            if (postProgressBar) {
-                postProgressBar.style.display = 'none';
-            }
+            document.getElementById('reader').style.display = 'none';
+            document.getElementById('toc-toggle').style.display = 'none';
+            document.getElementById('post-reading-progress').style.display = 'none';
         }
 
-        // 音乐播放器功能
         function initMusicPlayer() {
             const audio = document.getElementById('audio-player');
             const playBtn = document.getElementById('play-btn');
@@ -1175,91 +952,68 @@
             const volumeSlider = document.getElementById('volume-slider');
             const musicTitle = document.getElementById('music-title');
             const musicArtist = document.getElementById('music-artist');
-            const playlistItems = document.querySelectorAll('.playlist-item');
-            
-            let currentSongIndex = 0;
-            
-            // 设置初始音量
+            const items = document.querySelectorAll('.playlist-item');
+
+            let idx = 0;
+
             audio.volume = volumeSlider.value;
-            
-            // 播放/暂停
+
             playBtn.addEventListener('click', () => {
                 if (audio.paused) {
-                    if (audio.src) {
-                        audio.play();
-                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                    } else {
-                        // 如果没有选择歌曲，播放第一首
-                        playSong(0);
-                    }
+                    audio.src ? audio.play() : playSong(0);
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 } else {
                     audio.pause();
                     playBtn.innerHTML = '<i class="fas fa-play"></i>';
                 }
             });
-            
-            // 上一首
+
             prevBtn.addEventListener('click', () => {
-                currentSongIndex = (currentSongIndex - 1 + playlistItems.length) % playlistItems.length;
-                playSong(currentSongIndex);
+                idx = (idx - 1 + items.length) % items.length;
+                playSong(idx);
             });
-            
-            // 下一首
+
             nextBtn.addEventListener('click', () => {
-                currentSongIndex = (currentSongIndex + 1) % playlistItems.length;
-                playSong(currentSongIndex);
+                idx = (idx + 1) % items.length;
+                playSong(idx);
             });
-            
-            // 显示/隐藏播放列表
+
             playlistBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 playlist.style.display = playlist.style.display === 'block' ? 'none' : 'block';
             });
-            
-            // 点击播放列表外的区域关闭播放列表
+
             document.addEventListener('click', (e) => {
                 if (!playlist.contains(e.target) && e.target !== playlistBtn) {
                     playlist.style.display = 'none';
                 }
             });
-            
-            // 音量控制
+
             volumeSlider.addEventListener('input', () => {
                 audio.volume = volumeSlider.value;
             });
-            
-            // 播放列表项点击
-            playlistItems.forEach((item, index) => {
+
+            items.forEach((item, i) => {
                 item.addEventListener('click', () => {
-                    playSong(index);
+                    playSong(i);
                     playlist.style.display = 'none';
                 });
             });
-            
-            // 歌曲结束自动播放下一首
+
             audio.addEventListener('ended', () => {
-                currentSongIndex = (currentSongIndex + 1) % playlistItems.length;
-                playSong(currentSongIndex);
+                idx = (idx + 1) % items.length;
+                playSong(idx);
             });
-            
-            // 播放歌曲函数
-            function playSong(index) {
-                currentSongIndex = index;
-                const song = playlistItems[index];
-                
-                // 更新活动项
-                playlistItems.forEach(item => item.classList.remove('active'));
+
+            function playSong(i) {
+                idx = i;
+                items.forEach(item => item.classList.remove('active'));
+                const song = items[i];
                 song.classList.add('active');
-                
-                // 设置音频源
                 audio.src = song.getAttribute('data-src');
                 audio.play();
-                
-                // 更新信息
                 musicTitle.textContent = song.getAttribute('data-title');
                 musicArtist.textContent = song.getAttribute('data-artist');
-                
-                // 更新按钮状态
                 playBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }
         }
