@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh" id="html-root">
+<html lang="zh">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Merge-all 的算法博客，分享构造题、DP 优化、图论与思维题解法" />
   <title>Merge-all's Blog</title>
 
-  <!-- 字体 -->
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+  <!-- 字体：加入手写夸张体 Great Vibes -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <!-- 数学公式 & Markdown & 高亮 -->
   <script>
@@ -21,100 +20,127 @@
         packages: ['base', 'ams']
       },
       chtml: {
-        scale: 1.08,
+        scale: 1.05,
         matchFontHeight: false,
         displayAlign: 'center'
-      },
-      startup: {
-        pageReady: () => {
-          document.getElementById('reader-content')?.classList.add('fade-in');
-        }
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-theme-link">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
   <style>
     :root {
+      --primary: #4361ee;
+      --secondary: #4cc9f0;
+      --accent: #ff69b4;
       --text: #2c3e50;
-      --text-light: #555;
-      --bg: #fdfdfd;
+      --text-light: #7f8c8d;
+      --bg: #f8f9fa;
       --card: #ffffff;
-      --border: #e0e0e0;
-      --primary: #d63384;
-      --shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-      --shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.18);
-      --radius: 16px;
-      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      --accent: linear-gradient(135deg, #6f42c1, #d63384);
-      --nav-width: 300px;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+      --border: #ecf0f1;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --header-height: 80px;
     }
 
     [data-theme="dark"] {
+      --primary: #4cc9f0;
+      --secondary: #4361ee;
       --text: #e0e0e0;
-      --text-light: #aaa;
+      --text-light: #a0a0a0;
       --bg: #121212;
       --card: #1e1e1e;
-      --border: #444;
-      --primary: #e95ab6;
+      --border: #2d2d2d;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Source Sans Pro', sans-serif;
       color: var(--text);
-      background: var(--bg);
       line-height: 1.8;
-      transition: background 0.4s ease, color 0.4s ease;
-      margin: 0;
+      background: var(--bg);
       padding: 0;
+      margin: 0;
       min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* ============= 顶部进度条 ============= */
     #reading-progress {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
       width: 0%;
-      background: var(--accent);
-      z-index: 10000;
+      z-index: 1000;
       transition: width 0.1s ease;
-      box-shadow: 0 0 10px rgba(111, 66, 193, 0.5);
+      box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
     }
 
     /* ============= 顶部导航 ============= */
     .header {
       position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      backdrop-filter: blur(12px);
-      background: color-mix(in srgb, var(--card) 92%, transparent);
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(var(--card-rgb), 0.95);
+      backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
-      padding: 18px 40px;
+      padding: 16px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      height: var(--header-height);
       transition: var(--transition);
     }
 
-    .header.scrolled {
-      padding: 14px 40px;
-      background: color-mix(in srgb, var(--card) 85%, transparent);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-    }
-
+    /* Logo：蓝色 + 夸张手写体 */
     .logo {
       font-family: 'Great Vibes', cursive;
-      font-size: 2.6em;
+      font-size: 2.2em;
+      font-weight: normal;
       color: var(--primary);
       text-decoration: none;
       letter-spacing: -1px;
+      text-shadow: 0 2px 6px rgba(67, 97, 238, 0.3);
+      transition: var(--transition);
     }
 
-    .logo::after {
+    .logo:hover {
+      color: var(--secondary);
+      text-shadow: 0 0 15px rgba(67, 97, 238, 0.6);
+      transform: scale(1.08);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1em;
+      position: relative;
+      padding: 4px 0;
+      transition: var(--transition);
+    }
+
+    .nav-links a::after {
       content: '';
       position: absolute;
       bottom: 0;
@@ -122,174 +148,193 @@
       width: 0;
       height: 2px;
       background: var(--primary);
-      transition: width 0.5s ease;
-    }
-
-    .logo:hover::after {
-      width: 100%;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      align-items: center;
-    }
-
-    .nav-links a {
-      color: var(--text-light);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1em;
-      padding: 6px 0;
-      border-bottom: 2px solid transparent;
       transition: var(--transition);
     }
 
-    .nav-links a:hover,
-    .nav-links a.active {
+    .nav-links a:hover {
       color: var(--primary);
-      border-color: var(--primary);
     }
 
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* 主题切换按钮 */
     .theme-toggle {
-      background: var(--primary);
-      color: white;
+      background: none;
       border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
       cursor: pointer;
-      font-size: 0.9em;
-      transition: transform 0.2s ease;
+      font-size: 1.2em;
+      color: var(--text);
+      transition: var(--transition);
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .theme-toggle:hover {
-      transform: rotate(15deg);
+      color: var(--primary);
+      background: rgba(var(--primary-rgb), 0.1);
     }
 
-    /* ============= 主内容 ============= */
+    /* 搜索框 */
+    .search-container {
+      position: relative;
+      margin-right: 15px;
+    }
+
+    .search-input {
+      padding: 8px 15px 8px 35px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.9em;
+      width: 180px;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      outline: none;
+      width: 220px;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+
+    /* ============= 主内容区域 ============= */
     .container {
-      max-width: 860px;
-      margin: 150px auto 90px;
+      max-width: 900px;
+      margin: calc(var(--header-height) + 40px) auto 60px;
       padding: 0 40px;
-      opacity: 0;
-      animation: fadeInUp 0.9s ease forwards;
     }
 
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    .title {
+      text-align: center;
+      margin-bottom: 60px;
     }
 
     .title h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 3.8em;
+      font-size: 3.5em;
       font-weight: 700;
-      text-align: center;
-      background: var(--accent);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.2;
     }
 
     .title p {
-      text-align: center;
       color: var(--text-light);
-      font-size: 1.25em;
-      max-width: 680px;
+      font-size: 1.2em;
+      max-width: 600px;
       margin: 0 auto;
-      opacity: 0.9;
     }
 
-    /* ============= 文章卡片 ============= */
+    /* ============= 博客文章列表 ============= */
     .posts {
       display: grid;
-      gap: 36px;
-      margin-top: 40px;
+      gap: 30px;
     }
 
     .post {
       background: var(--card);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      border: 1px solid var(--border);
       overflow: hidden;
       transition: var(--transition);
-      opacity: 0;
-      transform: translateY(24px);
-      will-change: transform;
-    }
-
-    .post.visible {
-      opacity: 1;
-      transform: translateY(0);
+      border: 1px solid var(--border);
+      position: relative;
     }
 
     .post:hover {
-      transform: translateY(-8px) scale(1.01);
-      box-shadow: var(--shadow-hover);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     }
 
     .post-header {
-      padding: 36px 36px 24px;
+      padding: 30px 30px 20px;
       border-bottom: 1px solid var(--border);
     }
 
     .post-title {
-      font-size: 2.0em;
+      font-size: 1.8em;
       font-weight: 700;
+      margin-bottom: 12px;
       color: var(--text);
-      cursor: pointer;
-      display: block;
-      margin: 0 0 14px;
-      line-height: 1.3;
+      text-decoration: none;
+      display: inline-block;
       transition: var(--transition);
+      cursor: pointer;
     }
 
     .post-title:hover {
       color: var(--primary);
-      transform: translateX(6px);
     }
 
     .post-meta {
       display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
+      align-items: center;
+      gap: 20px;
       color: var(--text-light);
-      font-size: 0.95em;
+      font-size: 0.9em;
     }
 
     .post-meta-item {
       display: flex;
       align-items: center;
       gap: 6px;
-      white-space: nowrap;
     }
 
     .post-excerpt {
-      padding: 28px 36px 36px;
+      padding: 20px 30px 30px;
       color: var(--text-light);
-      font-size: 1.12em;
-      line-height: 1.75;
-      border-top: 1px dashed var(--border);
-      background: color-mix(in srgb, var(--bg) 98%, var(--border));
+      font-size: 1.1em;
+      line-height: 1.7;
+    }
+
+    .post-tags {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .post-tag {
+      background: rgba(var(--primary-rgb), 0.1);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: 600;
     }
 
     /* ============= 阅读器 ============= */
     #reader {
       display: none;
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       background: var(--bg);
       overflow-y: auto;
-      padding: 100px 40px 80px;
+      padding: 90px 20px 60px;
       box-sizing: border-box;
       z-index: 1000;
     }
 
+    /* 返回按钮 */
     #reader button {
-      padding: 14px 36px;
+      padding: 12px 28px;
       background: var(--primary);
       color: white;
       border: none;
@@ -297,202 +342,250 @@
       cursor: pointer;
       font-family: inherit;
       font-size: 1.1em;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 30px rgba(214, 51, 132, 0.3);
+      margin-bottom: 50px;
       transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
+      box-shadow: 0 8px 24px rgba(67, 97, 238, 0.4);
     }
 
     #reader button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(214, 51, 132, 0.4);
+      background: var(--secondary);
+      transform: scale(1.08);
+      box-shadow: 0 10px 30px rgba(67, 97, 238, 0.5);
     }
 
-    #back-to-top {
-      display: inline-flex;
-      margin-left: 12px;
-      background: #6c757d;
+    #reader-content {
+      max-width: 860px;
+      margin: 0 auto;
     }
 
-    #back-to-top:hover {
-      background: #5a6268;
-    }
-
-    /* ============= 侧边锚点导航（悬浮 + 快速跳转） ============= */
-    .anchor-nav {
-      position: fixed;
-      right: 40px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 0;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      z-index: 900;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      width: 180px;
-    }
-
-    .anchor-nav.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .anchor-nav a {
-      display: block;
-      padding: 6px 16px;
-      color: var(--text-light) !important;
-      text-decoration: none;
-      font-size: 0.9em;
-      transition: var(--transition);
-    }
-
-    .anchor-nav a:hover {
-      color: var(--primary) !important;
-      background: color-mix(in srgb, var(--card), var(--primary) 10%);
-      border-radius: 6px;
-    }
-
-    .anchor-nav a.active {
-      color: var(--primary) !important;
-      font-weight: 600;
-    }
-
-    /* ============= 骨架屏 ============= */
-    .skeleton {
-      background: linear-gradient(90deg, #f0f0f0, #e0e0e0, #f0f0f0);
-      background-size: 300% 100%;
-      animation: loading 1.5s infinite;
-      border-radius: 6px;
-    }
-
-    @keyframes loading {
-      0% { background-position: -300% 0; }
-      100% { background-position: 300% 0; }
-    }
-
-    .skeleton-title { height: 32px; width: 80%; margin: 0 auto 20px; }
-    .skeleton-para { height: 18px; width: 100%; margin-bottom: 12px; }
-
-    /* ============= 列表样式（完全手动控制） ============= */
-    ol.clean, ul.clean {
-      margin: 1.4em 0;
-      padding-left: 1.8em;
-    }
-
-    ol.clean > li {
+    /* ============= 关键修复：列表不缩进 ============= */
+    #reader-content ul,
+    #reader-content ol,
+    .post-excerpt ul,
+    .post-excerpt ol {
+      margin-left: 0;
+      padding-left: 0;
       list-style: none;
-      position: relative;
-      padding-left: 0.2em;
     }
 
-    ol.clean > li::before {
-      content: counter(item) ".";
-      counter-increment: item;
-      position: absolute;
-      left: -1.6em;
-      width: 1.4em;
-      color: var(--text);
-    }
-
-    ul.clean > li {
-      list-style: none;
-      position: relative;
-      padding-left: 0.2em;
-    }
-
-    ul.clean > li::before {
+    #reader-content ul > li::before,
+    .post-excerpt ul > li::before {
       content: "•";
-      position: absolute;
-      left: -1em;
-      color: var(--text);
+      margin-right: 0.5em;
+      color: inherit;
+    }
+
+    #reader-content li,
+    .post-excerpt li {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+      text-indent: 0;
+    }
+
+    /* ============= 链接颜色 ============= */
+    a {
+      text-decoration: none !important;
+      color: var(--text) !important;
+      cursor: pointer;
+    }
+
+    a:hover {
+      color: var(--primary) !important;
+    }
+
+    a[href^="http"] {
+      color: var(--text) !important;
+    }
+
+    a[href^="http"]:hover {
+      color: var(--primary) !important;
+      text-decoration: underline !important;
     }
 
     /* ============= 代码块 ============= */
-    code {
-      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-      background: rgba(0, 0, 0, 0.06);
-      color: var(--text);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.95em;
-    }
-
     pre {
-      margin: 2.2em 0;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--card);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
       position: relative;
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #2d2d2d;
+      overflow-x: auto;
+      margin: 1.6em 0;
+      transition: 0.3s;
     }
 
     pre code {
-      display: block;
-      padding: 18px;
-      margin: 0;
       background: none;
-      color: var(--text);
+      padding: 0;
+      font-family: 'Consolas', 'Courier New', monospace;
       font-size: 0.95em;
-      tab-size: 4;
-      line-height: 1.6;
-      overflow-x: auto;
+      color: #e0e0e0;
+    }
+
+    /* 复制按钮 */
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #3d3d3d;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      font-size: 0.75em;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: #4d4d4d;
+      opacity: 1;
+      transform: scale(1.05);
     }
 
     .lang-tag {
       position: absolute;
-      top: 12px;
-      left: 12px;
+      top: 10px;
+      left: 10px;
       background: var(--primary);
       color: white;
+      padding: 3px 6px;
+      border-radius: 4px;
       font-size: 0.75em;
-      padding: 4px 8px;
-      border-radius: 6px;
       font-weight: bold;
     }
 
-    /* ============= 图片 ============= */
-    #reader-content img {
-      display: block;
-      margin: 2em auto;
-      max-width: 100%;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    code {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
+      color: var(--primary);
     }
 
-    /* ============= 光标跟随特效 ============= */
-    .cursor-fx {
+    /* ============= 图片居中 ============= */
+    #reader-content img {
+      display: block;
+      margin: 1em auto;
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    /* ============= 目录功能 ============= */
+    .toc {
       position: fixed;
-      width: 20px;
-      height: 20px;
-      background: rgba(214, 51, 132, 0.2);
+      top: 100px;
+      right: 20px;
+      max-width: 250px;
+      max-height: calc(100vh - 150px);
+      overflow-y: auto;
+      background: var(--card);
+      padding: 15px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    .toc-header {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .toc ul {
+      list-style: none;
+      padding-left: 15px;
+    }
+
+    .toc li {
+      margin-bottom: 8px;
+    }
+
+    .toc a {
+      color: var(--text-light);
+      font-size: 0.9em;
+      transition: var(--transition);
+    }
+
+    .toc a:hover {
+      color: var(--primary);
+    }
+
+    .toc-toggle {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      pointer-events: none;
-      mix-blend-mode: soft-light;
-      transform: translate(-50%, -50%);
-      z-index: 9999;
-      transition: transform 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: var(--shadow);
     }
 
     /* ============= 响应式 ============= */
-    @media (max-width: 900px) {
-      .anchor-nav { display: none; }
-      .container, #reader { padding: 0 20px; }
-      #reader { padding: 100px 20px 60px; }
+    @media (max-width: 768px) {
+      .header {
+        padding: 16px 20px;
+      }
+      .logo {
+        font-size: 2em;
+      }
+      .nav-links {
+        gap: 15px;
+      }
+      .search-input {
+        width: 140px;
+      }
+      .search-input:focus {
+        width: 160px;
+      }
+      .container {
+        margin-top: 100px;
+        padding: 0 20px;
+      }
+      .title h1 {
+        font-size: 2.8em;
+      }
+      .title p {
+        font-size: 1.1em;
+      }
+      .post-header, .post-excerpt {
+        padding: 25px;
+      }
+      .post-title {
+        font-size: 1.6em;
+      }
+      #reader {
+        padding: 100px 20px 40px;
+      }
+      #reader button {
+        padding: 10px 24px;
+        font-size: 1em;
+      }
+      .copy-btn {
+        padding: 3px 6px;
+        font-size: 0.7em;
+      }
+      .lang-tag {
+        font-size: 0.7em;
+      }
+      .toc, .toc-toggle {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- 光标特效 -->
-  <div class="cursor-fx" id="cursor"></div>
 
   <!-- 顶部进度条 -->
   <div id="reading-progress"></div>
@@ -501,9 +594,13 @@
   <header class="header">
     <a href="/" class="logo">Merge-all</a>
     <nav class="nav-links">
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="搜索文章..." id="search-input">
+      </div>
       <a href="/">Home</a>
       <a href="#" class="active">Blog</a>
-      <button class="theme-toggle" onclick="toggleTheme()">
+      <button class="theme-toggle" id="theme-toggle">
         <i class="fas fa-moon"></i>
       </button>
     </nav>
@@ -512,301 +609,305 @@
   <!-- 主内容 -->
   <div class="container">
     <div class="title">
-      <h1>My Blog</h1>
+      <h1>Merge-all's Blog</h1>
       <p>记录算法学习的点点滴滴，分享思考与感悟</p>
     </div>
 
     <div class="posts">
-      <article class="post">
+      <article class="post" data-tags="算法 构造">
         <div class="post-header">
-          <h2 class="post-title" onclick="loadPost('construct')">构造专练</h2>
+          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Inlovexy/Inlovexy.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md')">
+            构造专练
+          </h2>
           <div class="post-meta">
-            <div class="post-meta-item"><i class="far fa-calendar"></i><span>2025-08-11</span></div>
-            <div class="post-meta-item"><i class="far fa-clock"></i><span>5 min read</span></div>
-            <div class="post-meta-item"><i class="fas fa-code"></i><span>构造 / 图论 / 贪心</span></div>
+            <div class="post-meta-item">
+              <i class="far fa-calendar"></i>
+              <span>2025-08-11</span>
+            </div>
+            <div class="post-meta-item">
+              <i class="far fa-clock"></i>
+              <span>5 min read</span>
+            </div>
+          </div>
+          <div class="post-tags">
+            <span class="post-tag">算法</span>
+            <span class="post-tag">构造</span>
           </div>
         </div>
-        <div class="post-excerpt">构造太菜了，多多练习涨涨脑子。</div>
+        <div class="post-excerpt">
+          构造太菜了，多多练习涨涨脑子。
+        </div>
       </article>
-
-      <article class="post">
+      <article class="post" data-tags="算法 dp 优化">
         <div class="post-header">
-          <h2 class="post-title" onclick="loadPost('quad')">决策性 DP</h2>
+          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Inlovexy/Inlovexy.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md')">
+            决策性 dp
+          </h2>
           <div class="post-meta">
-            <div class="post-meta-item"><i class="far fa-calendar"></i><span>2025-08-16</span></div>
-            <div class="post-meta-item"><i class="far fa-clock"></i><span>5 min read</span></div>
-            <div class="post-meta-item"><i class="fas fa-chart-line"></i><span>DP / 四边形不等式</span></div>
+            <div class="post-meta-item">
+              <i class="far fa-calendar"></i>
+              <span>2025-08-16</span>
+            </div>
+            <div class="post-meta-item">
+              <i class="far fa-clock"></i>
+              <span>5 min read</span>
+            </div>
+          </div>
+          <div class="post-tags">
+            <span class="post-tag">算法</span>
+            <span class="post-tag">dp</span>
+            <span class="post-tag">优化</span>
           </div>
         </div>
-        <div class="post-excerpt">四边形不等式与决策单调性优化。</div>
+        <div class="post-excerpt">
+          优化 dp
+        </div>
       </article>
     </div>
   </div>
 
   <!-- 阅读器 -->
   <div id="reader">
-    <button onclick="closeReader()"><i class="fas fa-arrow-left"></i> Back</button>
-    <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i> Top</button>
+    <button onclick="closeReader()">Back</button>
     <div id="reader-content"></div>
   </div>
 
-  <!-- 侧边锚点导航 -->
-  <nav class="anchor-nav" id="anchor-nav"></nav>
+  <!-- 目录 -->
+  <div class="toc-toggle" id="toc-toggle">
+    <i class="fas fa-list"></i>
+  </div>
+  <div class="toc" id="toc"></div>
 
   <script>
-    // 内联文章内容（完全控制格式，避免重复符号）
-    const posts = {
-      construct: `
-        <h1 id="title">构造专练</h1>
-        <p>构造太菜了，多多练习涨涨脑子。</p>
-
-        <h2 id="poi">[POI 2013] GRA-Tower Defense Game</h2>
-        <p>一道水绿，一看是还以为攻击距离为 2 是指只能打到相距为 2 的点，画了一下样例以后发现不就是在一开始的基础上多走一步吗。</p>
-
-        <ul class="clean">
-          <li>发现：或许在攻击距离为 1 的时候要好好考虑一下分配，可是当你发现攻击距离为 2 的话，随便怎么搞都一定不劣</li>
-          <li>我们发现可以考虑去枚举当前加入的点 i 所在段的位置 j-1, j，然后通过前面发现的规律计算出最小值即可。</li>
-        </ul>
-
-        <pre><code class="language-cpp">#include <bits/stdc++.h>
-using namespace std;
-const int N = 5e5 + 10;
-int n, m, k, cnt;
-vector<int> G[N], ans;
-bool vis[N];
-void cover(int x) {
-	for(int y : G[x]) {
-		vis[y] = 1;
-		for(int z : G[y])
-			vis[z] = 1;
-	}
-}
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cin >> n >> m >> k;
-	for(int i = 1, u, v; i <= m; i ++) {
-		cin >> u >> v;
-		G[u].emplace_back(v), G[v].emplace_back(u);
-	}
-	for(int i = 1; i <= n; i ++) {
-		if(!vis[i]) {
-			vis[i] = true;
-			cover(i);
-			ans.emplace_back(i);
-		}
-	}
-	cout << ans.size() << '\n';
-	for(int it : ans) cout << it << ' ';
-	return cout << '\n', 0;
-}
-</code></pre>
-
-        <h2 id="tree">树的重量</h2>
-        <p>神仙题，这道题让我知道了<strong>画图找规律</strong>的重要性。</p>
-
-        <ol class="clean">
-          <li>n = 2 的情况：显然 $G_{1, 2}$。</li>
-          <li>n = 3 的情况：答案是蓝色段长度，$l = \\frac{G_{1,3} + G_{2,3} - G_{1,2}}{2}$</li>
-          <li>n = 4 的情况：枚举点所在段，取最小值。</li>
-        </ol>
-
-        <pre><code class="language-cpp">#include <bits/stdc++.h>
-using namespace std;
-const int N = 110;
-int n, G[N][N], ans;
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cin >> n;
-	for(int i = 1; i < n; i ++)
-		for(int j = i + 1; j <= n; j ++)
-			cin >> G[i][j];
-	ans = G[1][2];
-	for(int i = 3, minv; i <= n; i ++) {
-		minv = 0x3f3f3f3f;
-		for(int j = 2; j < i; j ++) minv = min(minv, G[1][i] + G[j][i] - G[1][j] >> 1);
-		ans += minv;
-	}
-	return cout << ans << '\n', 0;
-}
-</code></pre>
-      `,
-
-      quad: `
-        <h1 id="title">四边形不等式</h1>
-
-        <ol class="clean">
-          <li>定义1：在定义域上 $\\forall a \\le b \\le c \\le d \\in Z$，有 $w_{a, d} + w_{b, c} \\le w_{a, c} + w_{b, d}$，则称二元函数 $w$ 满足四边形不等式。</li>
-          <li>定义2：在定义域上 $\\forall a < b \\in Z$ 都有 $a < a+1 \\le b < b+1$，有 $w_{a,b+1} + w_{a+1,b} \\le w_{a,b} + w_{a+1,b+1}$，则称二元函数 $w$ 满足四边形不等式。</li>
-        </ol>
-
-        <p>定义1 和定义2 是等价的。</p>
-
-        <ul class="clean">
-          <li>定义1 通常是推单调性，定义2 通常来证明这个函数具有四边形不等式性质。</li>
-        </ul>
-
-        <h2 id="dp-opt">优化 dp</h2>
-        <p>当 dp 的转移式满足：$\\displaystyle f_i = \\min_{0 \\leq j < i} \\{ f_j + v_{j,i} \\}$，且 $v_{j, i}$ 满足四边形不等式，则 $f_i$ 的最优决策具有单调性。</p>
-        <p>$P_i$ 表示 $f_i$ 取到的最优解的 $j$，则 $P_i$ 单调不降。</p>
-
-        <ul class="clean">
-          <li>若 $p$ 对于 $i$ 比 $p$ 前面的所有决策都更优，则 $p$ 对于 $\\forall i' > i$ 都有 $p$ 比前面的所有决策更优。</li>
-        </ul>
-
-        <p>证明：</p>
-        $$
-        0 \\leq j < p < i < i'
-        $$
-        $$
-        f_p + v_{p, i} \\leq f_j + v_{j, i}
-        $$
-        $$
-        v_{j, i'} + v_{p, i} \\ge v_{j, i} + v_{p, i'}
-        $$
-        $$
-        v_{p, i'} - v_{p, i} \\leq v_{j, i'} - v_{j, i}
-        $$
-        $$
-        f_p + v_{p, i'} \\le f_j + v_{j, i'}
-        $$
-      `
-    };
-
-    // 生成侧边锚点导航
-    function generateAnchors(html) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const headings = doc.querySelectorAll('h1, h2, h3');
-      const nav = document.getElementById('anchor-nav');
-      nav.innerHTML = '';
-
-      headings.forEach(h => {
-        if (!h.id) return;
-        const level = parseInt(h.tagName[1]);
-        const a = document.createElement('a');
-        a.href = '#' + h.id;
-        a.textContent = h.textContent;
-        a.style.paddingLeft = (level - 1) * 12 + 'px';
-        nav.appendChild(a);
-      });
-
-      nav.classList.add('show');
-    }
-
-    // 滚动时激活对应锚点
-    function activateAnchors() {
-      const nav = document.getElementById('anchor-nav');
-      const links = nav.querySelectorAll('a');
-      const scrollPos = window.scrollY + 100;
-
-      links.forEach(a => {
-        a.classList.remove('active');
-        const target = document.querySelector(a.hash);
-        if (target) {
-          const top = target.offsetTop;
-          const height = target.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            a.classList.add('active');
-          }
+    // 初始化 marked
+    document.addEventListener('DOMContentLoaded', () => {
+      // 设置CSS变量
+      document.documentElement.style.setProperty('--primary-rgb', '67, 97, 238');
+      
+      // 初始化主题
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
+      
+      // 初始化marked
+      marked.setOptions({
+        gfm: true,
+        breaks: true,
+        smartLists: true,
+        highlight: (code, lang) => {
+          const hl = hljs.getLanguage(lang) ? lang : 'plaintext';
+          return hljs.highlight(code, { language: hl }).value;
         }
       });
-    }
 
-    // 加载文章
-    async function loadPost(key) {
-      const reader = document.getElementById('reader');
-      const contentEl = document.getElementById('reader-content');
-      const anchorNav = document.getElementById('anchor-nav');
-
-      reader.style.display = 'block';
-      window.scrollTo(0, 0);
-      contentEl.innerHTML = `
-        <div class="skeleton skeleton-title"></div>
-        <div class="skeleton skeleton-para"></div>
-        <div class="skeleton skeleton-para" style="width:80%"></div>
-      `;
-      anchorNav.classList.remove('show');
-
-      setTimeout(() => {
-        const html = posts[key];
-        contentEl.innerHTML = html;
-
-        // 生成锚点
-        generateAnchors(html);
-
-        // 高亮代码
-        contentEl.querySelectorAll('pre code').forEach(block => {
-          const lang = block.className.replace('language-', '') || 'text';
-          const displayName = { cpp: 'C++', python: 'Python', java: 'Java' }[lang] || lang.toUpperCase();
-          const langTag = document.createElement('div');
-          langTag.className = 'lang-tag';
-          langTag.textContent = displayName;
-          block.parentNode.style.position = 'relative';
-          block.parentNode.insertBefore(langTag, block);
-          hljs.highlightElement(block);
-        });
-
-        MathJax.typeset([contentEl]);
-      }, 100);
-    }
-
-    function closeReader() {
-      document.getElementById('reader').style.display = 'none';
-      document.getElementById('anchor-nav').classList.remove('show');
-    }
-
-    function toggleTheme() {
-      const root = document.documentElement;
-      const isDark = root.getAttribute('data-theme') === 'dark';
-      if (isDark) {
-        setLight();
-      } else {
-        setDark();
-      }
-      localStorage.theme = isDark ? 'light' : 'dark';
-    }
-
-    function setDark() {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.querySelector('.theme-toggle i').className = 'fas fa-sun';
-      document.getElementById('hljs-theme-link').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
-    }
-
-    function setLight() {
-      document.documentElement.removeAttribute('data-theme');
-      document.querySelector('.theme-toggle i').className = 'fas fa-moon';
-      document.getElementById('hljs-theme-link').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
-    }
-
-    // 光标跟随
-    document.addEventListener('mousemove', e => {
-      const cursor = document.getElementById('cursor');
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-
-    // 主题初始化
-    document.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        setDark();
-      } else {
-        setLight();
-      }
-
+      // 进度条
       window.addEventListener('scroll', () => {
         const total = document.body.scrollHeight - window.innerHeight;
         const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
-        document.getElementById('reading-progress').style.width = `${Math.min(progress, 100)}%`;
-        activateAnchors();
+        const progressBar = document.getElementById('reading-progress');
+        if (progressBar) {
+          progressBar.style.width = `${Math.min(progress, 100)}%`;
+        }
+        
+        // 显示/隐藏目录按钮
+        const tocToggle = document.getElementById('toc-toggle');
+        if (tocToggle && document.getElementById('reader').style.display === 'block') {
+          tocToggle.style.display = 'flex';
+        }
       });
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.post').forEach(el => observer.observe(el));
+      // 搜索功能
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', debounce((e) => {
+          const searchTerm = e.target.value.toLowerCase();
+          const posts = document.querySelectorAll('.post');
+          
+          posts.forEach(post => {
+            const title = post.querySelector('.post-title').textContent.toLowerCase();
+            const excerpt = post.querySelector('.post-excerpt').textContent.toLowerCase();
+            const tags = post.getAttribute('data-tags').toLowerCase();
+            
+            if (title.includes(searchTerm) || excerpt.includes(searchTerm) || tags.includes(searchTerm)) {
+              post.style.display = 'block';
+            } else {
+              post.style.display = 'none';
+            }
+          });
+        }, 300));
+      }
+
+      // 主题切换
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+          setTheme(newTheme);
+          localStorage.setItem('theme', newTheme);
+        });
+      }
+
+      // 目录切换
+      const tocToggle = document.getElementById('toc-toggle');
+      if (tocToggle) {
+        tocToggle.addEventListener('click', () => {
+          const toc = document.getElementById('toc');
+          if (toc.style.display === 'block') {
+            toc.style.display = 'none';
+          } else {
+            toc.style.display = 'block';
+          }
+        });
+      }
     });
+
+    // 设置主题
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        if (theme === 'dark') {
+          themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+          themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+      }
+    }
+
+    // 防抖函数
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // 生成目录
+    function generateTOC() {
+      const readerContent = document.getElementById('reader-content');
+      const headings = readerContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      const toc = document.getElementById('toc');
+      
+      if (headings.length === 0) {
+        toc.innerHTML = '<div class="toc-header">目录</div><p>无标题</p>';
+        return;
+      }
+      
+      let tocHTML = '<div class="toc-header">目录</div><ul>';
+      let lastLevel = 0;
+      
+      headings.forEach((heading, index) => {
+        const level = parseInt(heading.tagName.substring(1));
+        const id = `heading-${index}`;
+        heading.id = id;
+        
+        if (level > lastLevel) {
+          tocHTML += '<ul>';
+        } else if (level < lastLevel) {
+          tocHTML += '</ul></li>';
+        } else if (index !== 0) {
+          tocHTML += '</li>';
+        }
+        
+        tocHTML += `<li><a href="#${id}">${heading.textContent}</a>`;
+        lastLevel = level;
+      });
+      
+      // 关闭所有打开的标签
+      for (let i = lastLevel; i > 1; i--) {
+        tocHTML += '</ul></li>';
+      }
+      if (headings.length > 0) {
+        tocHTML += '</li>';
+      }
+      
+      tocHTML += '</ul>';
+      toc.innerHTML = tocHTML;
+    }
+
+    // 加载文章
+    function loadPost(url) {
+      const reader = document.getElementById('reader');
+      const contentEl = document.getElementById('reader-content');
+      const tocToggle = document.getElementById('toc-toggle');
+
+      if (!contentEl) {
+        console.error('reader-content element not found');
+        return;
+      }
+
+      reader.style.display = 'block';
+      window.scrollTo(0, 0);
+      contentEl.innerHTML = '<p style="color:#7f8c8d; text-align:center; font-size:1.1em">加载中……</p>';
+      tocToggle.style.display = 'flex';
+
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.text();
+        })
+        .then(md => {
+          contentEl.innerHTML = marked.parse(md);
+
+          // 处理代码块
+          contentEl.querySelectorAll('pre code').forEach(block => {
+            const lang = block.className.replace('language-', '') || 'text';
+            const displayName = { 'cpp': 'C++', 'python': 'Python', 'java': 'Java' }[lang] || lang.toUpperCase();
+
+            const langTag = document.createElement('div');
+            langTag.textContent = displayName;
+            langTag.className = 'lang-tag';
+            block.parentNode.style.position = 'relative';
+            block.parentNode.insertBefore(langTag, block);
+
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.onclick = () => {
+              navigator.clipboard.writeText(block.textContent).then(() => {
+                btn.textContent = '✓';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+              }).catch(err => {
+                console.error('复制失败:', err);
+                btn.textContent = '✗';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+              });
+            };
+            block.parentNode.appendChild(btn);
+
+            hljs.highlightElement(block);
+          });
+
+          // 生成目录
+          generateTOC();
+
+          // 渲染数学公式
+          if (window.MathJax) {
+            MathJax.typesetClear();
+            MathJax.typeset([contentEl]);
+          }
+        })
+        .catch(err => {
+          console.error('加载失败:', err);
+          contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
+        });
+    }
+
+    function closeReader() {
+      const reader = document.getElementById('reader');
+      const tocToggle = document.getElementById('toc-toggle');
+      if (reader) {
+        reader.style.display = 'none';
+      }
+      if (tocToggle) {
+        tocToggle.style.display = 'none';
+      }
+    }
   </script>
 </body>
 </html>
