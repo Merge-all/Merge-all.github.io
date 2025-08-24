@@ -6,7 +6,7 @@
   <meta name="description" content="Merge-all 的算法博客，分享构造题、DP 优化、图论与思维题解法" />
   <title>Merge-all's Blog</title>
 
-  <!-- 字体优化：加入手写体 + 衬线体 + 无衬线体 -->
+  <!-- 字体：手写体 + 衬线 + 无衬线 -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
 
@@ -34,122 +34,92 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-theme-link">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
   <style>
     :root {
-      --primary: #ec407a;
-      --primary-light: #f06292;
-      --text: #263238;
-      --text-light: #546e7a;
-      --bg: #f8f9fa;
-      --bg-alt: #ffffff;
+      --text: #2c3e50;
+      --text-light: #555;
+      --bg: #fdfdfd;
       --card: #ffffff;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-      --shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.18);
-      --radius: 16px;
       --border: #e0e0e0;
+      --primary: #e91e63;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.15);
+      --radius: 14px;
       --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      --accent-gradient: linear-gradient(135deg, #ec407a, #7b1fa2, #0288d1);
     }
 
-    /* 暗色模式 */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --text: #eceff1;
-        --text-light: #b0bec5;
-        --bg: #1e1e1e;
-        --bg-alt: #2d2d2d;
-        --card: #262626;
-        --border: #3a3a3a;
-        --primary: #f06292;
-      }
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* 暗色模式（全局） */
+    [data-theme="dark"] {
+      --text: #e0e0e0;
+      --text-light: #aaa;
+      --bg: #1a1a1a;
+      --card: #222;
+      --border: #444;
     }
 
     body {
       font-family: 'Source Sans Pro', sans-serif;
       color: var(--text);
-      line-height: 1.8;
       background: var(--bg);
-      transition: background 0.4s ease;
-      padding: 0;
+      line-height: 1.8;
+      transition: background 0.4s ease, color 0.4s ease;
       margin: 0;
+      padding: 0;
       min-height: 100vh;
     }
 
-    /* ============= 顶部进度条（渐变 + 动效） ============= */
+    /* ============= 顶部进度条 ============= */
     #reading-progress {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       height: 4px;
-      background: var(--accent-gradient);
       width: 0%;
+      background: linear-gradient(90deg, #4361ee, #3a86ff);
       z-index: 10000;
       transition: width 0.1s ease;
-      box-shadow: 0 0 10px rgba(236, 64, 122, 0.4);
+      box-shadow: 0 0 8px rgba(67, 97, 238, 0.4);
     }
 
-    /* ============= 顶部导航（毛玻璃 + 渐变边框） ============= */
+    /* ============= 顶部导航 ============= */
     .header {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 1000;
-      backdrop-filter: blur(12px);
-      background: color-mix(in srgb, var(--bg-alt) 95%, transparent);
+      backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--card) 90%, transparent);
       border-bottom: 1px solid var(--border);
       padding: 18px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       transition: var(--transition);
     }
 
     .header.scrolled {
       padding: 14px 40px;
-      background: color-mix(in srgb, var(--bg-alt) 90%, transparent);
+      background: color-mix(in srgb, var(--card) 85%, transparent);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-    /* Logo：优雅手写体 + 微动效 */
     .logo {
       font-family: 'Great Vibes', cursive;
       font-size: 2.4em;
       color: var(--primary);
       text-decoration: none;
-      letter-spacing: -0.5px;
-      position: relative;
-      transition: var(--transition);
+      letter-spacing: -1px;
+      transition: transform 0.2s;
     }
 
-    .logo::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary);
-      transition: width 0.4s ease;
-    }
-
-    .logo:hover::after {
-      width: 100%;
+    .logo:hover {
+      transform: scale(1.05);
     }
 
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 30px;
       align-items: center;
     }
 
@@ -158,49 +128,33 @@
       text-decoration: none;
       font-weight: 600;
       font-size: 1em;
-      position: relative;
-      padding: 6px 0;
-      transition: var(--transition);
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary);
+      padding: 4px 0;
+      border-bottom: 2px solid transparent;
       transition: var(--transition);
     }
 
     .nav-links a:hover,
     .nav-links a.active {
       color: var(--primary);
+      border-color: var(--primary);
     }
 
-    .nav-links a:hover::after,
-    .nav-links a.active::after {
-      width: 100%;
-    }
-
-    /* 主题切换按钮 */
     .theme-toggle {
       background: var(--primary);
       color: white;
       border: none;
       padding: 8px 12px;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 0.9em;
       transition: transform 0.2s;
     }
 
     .theme-toggle:hover {
-      transform: rotate(15deg);
+      transform: rotate(10deg);
     }
 
-    /* ============= 主内容区域 ============= */
+    /* ============= 主内容 ============= */
     .container {
       max-width: 840px;
       margin: 140px auto 80px;
@@ -210,54 +164,41 @@
     }
 
     @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .title {
-      text-align: center;
-      margin-bottom: 70px;
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .title h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 3.8em;
+      font-size: 3.6em;
       font-weight: 700;
-      color: var(--text);
+      text-align: center;
       margin-bottom: 16px;
-      line-height: 1.2;
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--text);
     }
 
     .title p {
+      text-align: center;
       color: var(--text-light);
-      font-size: 1.25em;
+      font-size: 1.2em;
       max-width: 640px;
       margin: 0 auto;
-      opacity: 0.9;
     }
 
-    /* ============= 博客文章列表 ============= */
+    /* ============= 文章列表 ============= */
     .posts {
       display: grid;
-      gap: 32px;
+      gap: 30px;
     }
 
     .post {
       background: var(--card);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow: hidden;
-      transition: var(--transition);
       border: 1px solid var(--border);
-      position: relative;
+      overflow: hidden;
       opacity: 0;
       transform: translateY(20px);
+      transition: var(--transition);
     }
 
     .post.visible {
@@ -266,58 +207,51 @@
     }
 
     .post:hover {
-      transform: translateY(-8px);
+      transform: translateY(-6px);
       box-shadow: var(--shadow-hover);
-    }
-
-    .post-header {
-      padding: 32px 32px 22px;
-      border-bottom: 1px solid var(--border);
     }
 
     .post-title {
       font-size: 1.9em;
       font-weight: 700;
-      margin-bottom: 14px;
       color: var(--text);
-      text-decoration: none;
-      display: inline-block;
-      transition: var(--transition);
       cursor: pointer;
+      display: block;
+      margin: 0 0 12px;
+      transition: var(--transition);
     }
 
     .post-title:hover {
       color: var(--primary);
-      transform: translateX(4px);
+      text-decoration: underline;
     }
 
     .post-meta {
       display: flex;
-      align-items: center;
-      gap: 24px;
+      gap: 20px;
       color: var(--text-light);
       font-size: 0.95em;
+      margin-bottom: 16px;
     }
 
     .post-meta-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .post-excerpt {
-      padding: 22px 32px 32px;
+      padding: 20px 30px 30px;
       color: var(--text-light);
       font-size: 1.1em;
       line-height: 1.7;
     }
 
-    /* ============= 阅读器（沉浸式） ============= */
+    /* ============= 阅读器 ============= */
     #reader {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
       background: var(--bg);
@@ -325,12 +259,6 @@
       padding: 100px 40px 80px;
       box-sizing: border-box;
       z-index: 1000;
-      animation: slideIn 0.5s ease-out;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     #reader button {
@@ -342,18 +270,14 @@
       cursor: pointer;
       font-family: inherit;
       font-size: 1.1em;
-      margin-bottom: 60px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 24px rgba(233, 30, 99, 0.3);
       transition: var(--transition);
-      box-shadow: 0 10px 30px rgba(236, 64, 122, 0.4);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     #reader button:hover {
-      background: var(--primary-light);
       transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(236, 64, 122, 0.5);
+      box-shadow: 0 12px 30px rgba(233, 30, 99, 0.4);
     }
 
     #reader-content {
@@ -367,129 +291,87 @@
       opacity: 1;
     }
 
-    /* ============= 修复：列表样式 ============= */
-    #reader-content ul,
-    #reader-content ol,
-    .post-excerpt ul,
-    .post-excerpt ol {
+    /* ============= 链接样式：保持黑色/正文色，无下划线，hover 也不变色 ============= */
+    a {
+      color: var(--text) !important;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    a:hover {
+      /* 保持原色，仅加个轻微阴影或背景色提升可点击感 */
+      text-decoration: none;
+    }
+
+    /* ============= 列表样式：仅一个黑色 •，无颜色 ============= */
+    ul, ol {
       margin: 1em 0;
       padding-left: 1.5em;
     }
 
-    #reader-content ul > li::before,
-    .post-excerpt ul > li::before {
+    ul > li::before {
       content: "•";
-      color: var(--primary);
+      color: var(--text);
       margin-right: 0.6em;
-      font-weight: bold;
+      font-weight: normal;
     }
 
-    #reader-content ol {
+    ol {
       counter-reset: item;
     }
 
-    #reader-content ol > li {
+    ol > li {
       counter-increment: item;
-      position: relative;
     }
 
-    #reader-content ol > li::before {
-      content: counter(item);
-      color: white;
-      background: var(--primary);
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8em;
-      margin-right: 0.8em;
+    ol > li::before {
+      content: counter(item) ".";
+      margin-right: 0.6em;
+      color: var(--text);
     }
 
-    /* ============= 链接样式 ============= */
-    a {
-      color: var(--primary);
-      text-decoration: none;
-      transition: var(--transition);
-      position: relative;
+    /* ============= 代码块：VSCode 风格 ============= */
+    code {
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.95em;
     }
 
-    a::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--primary);
-      transition: width 0.3s ease;
-    }
-
-    a:hover::after {
-      width: 100%;
-    }
-
-    /* ============= 代码块增强 ============= */
     pre {
-      position: relative;
-      background: #2d2d2d;
-      border-radius: 12px;
-      border: 1px solid #444;
-      overflow: hidden;
       margin: 2em 0;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      position: relative;
     }
 
     pre code {
-      color: #f8f8f2;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.95em;
       display: block;
-      padding: 1.2em;
+      padding: 16px;
+      margin: 0;
+      background: none;
+      color: var(--text);
+      font-size: 0.95em;
+      tab-size: 4;
+      line-height: 1.6;
       overflow-x: auto;
     }
 
     .lang-tag {
       position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      font-size: 0.75em;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255, 255, 255, 0.15);
+      top: 10px;
+      left: 10px;
+      background: var(--primary);
       color: white;
-      border: none;
-      padding: 5px 10px;
       font-size: 0.75em;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      backdrop-filter: blur(4px);
-      transition: all 0.2s ease;
-    }
-
-    .copy-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-1px);
-    }
-
-    code {
-      background: rgba(236, 64, 122, 0.1);
-      color: var(--primary);
-      padding: 2px 6px;
+      padding: 3px 6px;
       border-radius: 4px;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.95em;
+      font-weight: bold;
     }
 
     /* ============= 图片 ============= */
@@ -497,58 +379,28 @@
       display: block;
       margin: 1.8em auto;
       max-width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-      transition: transform 0.3s ease;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
     }
 
-    #reader-content img:hover {
-      transform: scale(1.02);
-    }
-
-    /* ============= 响应式优化 ============= */
+    /* ============= 响应式 ============= */
     @media (max-width: 768px) {
       .header { padding: 16px 20px; }
       .logo { font-size: 2.2em; }
-      .nav-links { gap: 16px; }
-
-      .container {
-        margin-top: 110px;
-        padding: 0 20px;
-      }
-
+      .nav-links { gap: 20px; }
+      .container { margin-top: 110px; padding: 0 20px; }
       .title h1 { font-size: 2.8em; }
       .post-title { font-size: 1.7em; }
-      .post-header, .post-excerpt { padding: 24px; }
-
-      #reader {
-        padding: 100px 20px 60px;
-      }
-
-      #reader button {
-        padding: 12px 28px;
-        font-size: 1em;
-      }
-
-      pre { border-radius: 10px; }
-    }
-
-    /* ============= 快捷键提示 ============= */
-    .hint {
-      text-align: center;
-      color: var(--text-light);
-      font-size: 0.9em;
-      margin-top: 1em;
-      opacity: 0.7;
+      .post-excerpt { padding: 24px; }
+      #reader { padding: 100px 20px 60px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 顶部进度条 -->
   <div id="reading-progress"></div>
 
-  <!-- 顶部导航 -->
   <header class="header">
     <a href="/" class="logo">Merge-all</a>
     <nav class="nav-links">
@@ -560,7 +412,6 @@
     </nav>
   </header>
 
-  <!-- 主内容 -->
   <div class="container">
     <div class="title">
       <h1>My Blog</h1>
@@ -574,42 +425,25 @@
             构造专练
           </h2>
           <div class="post-meta">
-            <div class="post-meta-item">
-              <i class="far fa-calendar"></i>
-              <span>2025-08-11</span>
-            </div>
-            <div class="post-meta-item">
-              <i class="far fa-clock"></i>
-              <span>5 min read</span>
-            </div>
-            <div class="post-meta-item">
-              <i class="fas fa-code"></i>
-              <span>构造 / 图论 / 贪心</span>
-            </div>
+            <div class="post-meta-item"><i class="far fa-calendar"></i><span>2025-08-11</span></div>
+            <div class="post-meta-item"><i class="far fa-clock"></i><span>5 min read</span></div>
+            <div class="post-meta-item"><i class="fas fa-code"></i><span>构造 / 图论 / 贪心</span></div>
           </div>
         </div>
         <div class="post-excerpt">
           构造太菜了，多多练习涨涨脑子。
         </div>
       </article>
+
       <article class="post">
         <div class="post-header">
           <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md')">
             决策性 DP
           </h2>
           <div class="post-meta">
-            <div class="post-meta-item">
-              <i class="far fa-calendar"></i>
-              <span>2025-08-16</span>
-            </div>
-            <div class="post-meta-item">
-              <i class="far fa-clock"></i>
-              <span>5 min read</span>
-            </div>
-            <div class="post-meta-item">
-              <i class="fas fa-chart-line"></i>
-              <span>DP / 四边形不等式</span>
-            </div>
+            <div class="post-meta-item"><i class="far fa-calendar"></i><span>2025-08-16</span></div>
+            <div class="post-meta-item"><i class="far fa-clock"></i><span>5 min read</span></div>
+            <div class="post-meta-item"><i class="fas fa-chart-line"></i><span>DP / 四边形不等式</span></div>
           </div>
         </div>
         <div class="post-excerpt">
@@ -619,13 +453,11 @@
     </div>
   </div>
 
-  <!-- 阅读器 -->
   <div id="reader">
     <button onclick="closeReader()">
       <i class="fas fa-arrow-left"></i> Back
     </button>
     <div id="reader-content"></div>
-    <p class="hint">⌨️ 支持 Esc 键返回</p>
   </div>
 
   <script>
@@ -636,72 +468,73 @@
         breaks: true,
         smartLists: true,
         highlight: (code, lang) => {
-          const hl = hljs.getLanguage(lang) ? lang : 'plaintext';
-          return hljs.highlight(code, { language: hl }).value;
+          const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
+          return hljs.highlight(code, { language: validLang }).value;
         }
       });
 
-      // 滚动进度条
+      // 进度条
       window.addEventListener('scroll', () => {
         const total = document.body.scrollHeight - window.innerHeight;
         const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
         document.getElementById('reading-progress').style.width = `${Math.min(progress, 100)}%`;
       });
 
-      // 导航栏缩小效果
+      // 导航栏压缩
       window.addEventListener('scroll', () => {
-        const header = document.querySelector('.header');
-        header.classList.toggle('scrolled', window.scrollY > 50);
+        document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
       });
 
-      // 文章渐现
+      // 文章渐显
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
+        entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
       }, { threshold: 0.1 });
+      document.querySelectorAll('.post').forEach(el => observer.observe(el));
 
-      document.querySelectorAll('.post').forEach(post => observer.observe(post));
-
-      // 快捷键支持
-      window.addEventListener('keydown', (e) => {
+      // 快捷键
+      window.addEventListener('keydown', e => {
         if (e.key === 'Escape' && document.getElementById('reader').style.display === 'block') {
           closeReader();
         }
       });
+
+      // 初始主题
+      if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        setDark();
+      } else {
+        setLight();
+      }
     });
 
-    // 缓存文章内容
+    // 缓存
     const postCache = {};
 
-    // 加载文章（带缓存）
     async function loadPost(url) {
       const reader = document.getElementById('reader');
       const contentEl = document.getElementById('reader-content');
 
       reader.style.display = 'block';
       window.scrollTo(0, 0);
-      contentEl.innerHTML = '<p style="color:#7f8c8d; text-align:center; font-size:1.1em">✨ 加载中……</p>';
+      contentEl.innerHTML = '<p style="text-align:center; color:var(--text-light); font-size:1.1em">加载中……</p>';
+
+      if (postCache[url]) {
+        contentEl.innerHTML = postCache[url];
+        MathJax.typeset([contentEl]);
+        return;
+      }
 
       try {
-        if (postCache[url]) {
-          contentEl.innerHTML = postCache[url];
-          MathJax.typeset([contentEl]);
-          return;
-        }
-
         const res = await fetch(url);
-        if (!res.ok) throw new Error(`加载失败: ${res.status}`);
-
+        if (!res.ok) throw new Error(res.status);
         const md = await res.text();
         const html = marked.parse(md);
         postCache[url] = html;
         contentEl.innerHTML = html;
 
-        // 处理代码块
+        // 处理代码块：仅添加语言标签
         contentEl.querySelectorAll('pre code').forEach(block => {
           const lang = block.className.replace('language-', '') || 'text';
-          const displayName = { 'cpp': 'C++', 'python': 'Python', 'java': 'Java' }[lang] || lang.toUpperCase();
+          const displayName = { cpp: 'C++', python: 'Python', java: 'Java' }[lang] || lang.toUpperCase();
 
           const langTag = document.createElement('div');
           langTag.className = 'lang-tag';
@@ -709,27 +542,12 @@
           block.parentNode.style.position = 'relative';
           block.parentNode.insertBefore(langTag, block);
 
-          const btn = document.createElement('button');
-          btn.className = 'copy-btn';
-          btn.textContent = 'COPY';
-          btn.onclick = () => {
-            navigator.clipboard.writeText(block.textContent).then(() => {
-              btn.textContent = '✓';
-              setTimeout(() => btn.textContent = 'COPY', 2000);
-            }).catch(() => {
-              btn.textContent = '✗';
-              setTimeout(() => btn.textContent = 'COPY', 2000);
-            });
-          };
-          block.parentNode.appendChild(btn);
-
           hljs.highlightElement(block);
         });
 
         MathJax.typeset([contentEl]);
-
       } catch (err) {
-        contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
+        contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败</p>`;
       }
     }
 
@@ -737,19 +555,28 @@
       document.getElementById('reader').style.display = 'none';
     }
 
-    // 主题切换
     function toggleTheme() {
-      const root = document.getElementById('html-root');
+      const root = document.documentElement;
       const isDark = root.getAttribute('data-theme') === 'dark';
-      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      document.querySelector('.theme-toggle i').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+      if (isDark) {
+        setLight();
+      } else {
+        setDark();
+      }
+      localStorage.theme = isDark ? 'light' : 'dark';
     }
 
-    // 初始主题
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    function setDark() {
+      document.documentElement.setAttribute('data-theme', 'dark');
       document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+      document.getElementById('hljs-theme-link').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
+    }
+
+    function setLight() {
+      document.documentElement.removeAttribute('data-theme');
+      document.querySelector('.theme-toggle i').className = 'fas fa-moon';
+      document.getElementById('hljs-theme-link').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
     }
   </script>
-
 </body>
 </html>
