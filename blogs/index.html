@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Merge-all's Blog</title>
 
-    <!-- 字体：手写体 Great Vibes + 衬线/无衬线搭配 -->
+    <!-- 字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
@@ -100,7 +100,7 @@
             transition: width 0.1s ease;
         }
 
-        /* 顶部导航 */
+        /* 导航栏 */
         .header {
             position: fixed;
             top: 0;
@@ -363,7 +363,7 @@
             margin: 0 auto;
         }
 
-        /* 代码块：VS Code 风格缩进 */
+        /* 代码块 */
         pre {
             position: relative;
             background: #1a1a1a;
@@ -372,7 +372,6 @@
             border: 1px solid #2d2d2d;
             overflow-x: auto;
             margin: 1.6em 0;
-            transition: 0.3s;
         }
 
         pre code {
@@ -381,33 +380,11 @@
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 0.95em;
             color: #e0e0e0;
-            white-space: pre;        /* 保留空格与换行 */
-            tab-size: 4;             /* VS Code 默认缩进 */
+            white-space: pre;
+            tab-size: 4;
         }
 
-        /* 复制按钮 */
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #3d3d3d;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            font-size: 0.75em;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: all 0.2s ease;
-        }
-
-        .copy-btn:hover {
-            background: #4d4d4d;
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
+        /* 语言标签 */
         .lang-tag {
             position: absolute;
             top: 10px;
@@ -420,21 +397,23 @@
             font-weight: bold;
         }
 
-        code {
-            background: rgba(0, 0, 0, 0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.95em;
-            color: var(--primary);
-        }
-
         /* 图片居中 */
         #reader-content img {
             display: block;
             margin: 1em auto;
             max-width: 100%;
             border-radius: 8px;
+        }
+
+        /* 链接：不变色、无下划线 */
+        a {
+            text-decoration: none !important;
+            color: inherit !important;
+            cursor: pointer;
+        }
+
+        a:hover {
+            color: var(--primary) !important;
         }
 
         /* 目录 */
@@ -640,11 +619,9 @@
 </head>
 <body>
 
-    <!-- 进度条 -->
     <div id="reading-progress"></div>
     <div id="post-reading-progress"></div>
 
-    <!-- 导航 -->
     <header class="header">
         <a href="/" class="logo">Merge-all</a>
         <nav class="nav-links">
@@ -660,7 +637,6 @@
         </nav>
     </header>
 
-    <!-- 主内容 -->
     <div class="container">
         <div class="title">
             <h1>Merge-all's Blog</h1>
@@ -717,13 +693,11 @@
         </div>
     </div>
 
-    <!-- 阅读器 -->
     <div id="reader">
         <button onclick="closeReader()">Back</button>
         <div id="reader-content"></div>
     </div>
 
-    <!-- 目录 -->
     <div class="toc-toggle" id="toc-toggle">
         <i class="fas fa-list"></i>
     </div>
@@ -734,7 +708,6 @@
         </div>
     </div>
 
-    <!-- 音乐播放器 -->
     <div class="music-player">
         <div class="music-controls">
             <button class="music-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
@@ -753,29 +726,24 @@
 
         <div class="playlist" id="playlist">
             <div class="playlist-item active"
-                 data-src="https://music.163.com/song/media/outer/url?id=1398173719"
-                 data-title="千与千寻" data-artist="久石让">
-                千与千寻 - 久石让
+                 data-src="https://music.163.com/song/media/outer/url?id=186332" data-title="River Flows in You" data-artist="Yiruma">
+                River Flows in You - Yiruma
             </div>
             <div class="playlist-item"
-                 data-src="https://music.163.com/song/media/outer/url?id=440353010"
-                 data-title="天空之城" data-artist="久石让">
+                 data-src="https://music.163.com/song/media/outer/url?id=28205756" data-title="Kiss the Rain" data-artist="Yiruma">
+                Kiss the Rain - Yiruma
+            </div>
+            <div class="playlist-item"
+                 data-src="https://music.163.com/song/media/outer/url?id=440353010" data-title="天空之城" data-artist="久石让">
                 天空之城 - 久石让
             </div>
             <div class="playlist-item"
-                 data-src="https://music.163.com/song/media/outer/url?id=1812019267"
-                 data-title="Love Story" data-artist="Taylor Swift">
-                Love Story - Taylor Swift
+                 data-src="https://music.163.com/song/media/outer/url?id=1398173719" data-title="千与千寻" data-artist="久石让">
+                千与千寻 - 久石让
             </div>
             <div class="playlist-item"
-                 data-src="https://music.163.com/song/media/outer/url?id=1812019267"
-                 data-title="Ghost Face" data-artist="Killstation">
-                Ghost Face - Killstation
-            </div>
-            <div class="playlist-item"
-                 data-src="https://music.163.com/song/media/outer/url?id=1812019267"
-                 data-title="别怕变老" data-artist="王以太, 艾热">
-                别怕变老 - 王以太, 艾热
+                 data-src="https://music.163.com/song/media/outer/url?id=269007" data-title="Comptine d'un autre été" data-artist="Yann Tiersen">
+                Comptine d'un autre été - Yann Tiersen
             </div>
         </div>
     </div>
@@ -864,12 +832,13 @@
             };
         }
 
-        // 仅提取 h1 作为目录项（即文章标题）
+        let currentPostIndex = 0;
+
         function generateTOC() {
             const content = document.getElementById('reader-content');
             const headings = content.querySelectorAll('h1');
             const toc = document.getElementById('toc');
-            
+
             if (headings.length === 0) {
                 toc.innerHTML = '<div class="toc-header"><span>目录</span><span class="toc-close">&times;</span></div><p>无标题</p>';
                 return;
@@ -877,8 +846,9 @@
 
             let html = '<div class="toc-header"><span>目录</span><span class="toc-close">&times;</span></div><ul>';
             headings.forEach((h, idx) => {
-                h.id = `heading-${idx}`;
-                html += `<li><a href="#heading-${idx}">${h.textContent}</a></li>`;
+                const id = `article-${currentPostIndex}-${idx}`;
+                h.id = id;
+                html += `<li><a href="#${id}">${h.textContent}</a></li>`;
             });
             html += '</ul>';
             toc.innerHTML = html;
@@ -888,7 +858,8 @@
             });
         }
 
-        function loadPost(url) {
+        function loadPost(url, index = 0) {
+            currentPostIndex = index;
             const reader = document.getElementById('reader');
             const contentEl = document.getElementById('reader-content');
             reader.style.display = 'block';
@@ -900,31 +871,15 @@
                 .then(md => {
                     contentEl.innerHTML = marked.parse(md);
 
-                    // 处理代码块
+                    // 添加语言标签
                     contentEl.querySelectorAll('pre code').forEach(block => {
                         const lang = block.className.replace('language-', '') || 'text';
                         const displayName = { 'cpp': 'C++', 'python': 'Python', 'java': 'Java' }[lang] || lang.toUpperCase();
-
                         const langTag = document.createElement('div');
                         langTag.className = 'lang-tag';
                         langTag.textContent = displayName;
                         block.parentNode.style.position = 'relative';
                         block.parentNode.insertBefore(langTag, block);
-
-                        const btn = document.createElement('button');
-                        btn.className = 'copy-btn';
-                        btn.textContent = 'COPY';
-                        btn.onclick = () => {
-                            navigator.clipboard.writeText(block.textContent).then(() => {
-                                btn.textContent = '✓';
-                                setTimeout(() => btn.textContent = 'COPY', 2000);
-                            }).catch(() => {
-                                btn.textContent = '✗';
-                                setTimeout(() => btn.textContent = 'COPY', 2000);
-                            });
-                        };
-                        block.parentNode.appendChild(btn);
-
                         hljs.highlightElement(block);
                     });
 
