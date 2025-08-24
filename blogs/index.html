@@ -370,6 +370,111 @@
             margin: 0 auto;
         }
 
+        /* 阅读器工具条 */
+        .reader-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .reader-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .reader-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .reader-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 评论区域 */
+        .comments {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+        }
+
+        .comments h3 {
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .comment-form {
+            background: var(--card);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            font-family: inherit;
+            margin-bottom: 15px;
+            resize: vertical;
+        }
+
+        .comment-form button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .comment-form button:hover {
+            background: var(--secondary);
+        }
+
+        .comment-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .comment {
+            background: var(--card);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .comment-content {
+            color: var(--text);
+            line-height: 1.6;
+        }
+
         /* ============= 关键修复：列表不缩进 ============= */
         #reader-content ul,
         #reader-content ol,
@@ -747,6 +852,11 @@
                 right: 10px;
                 width: auto;
             }
+            .reader-tools {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -784,7 +894,7 @@
         <div class="posts">
             <article class="post" data-tags="算法 构造">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Inlovexy/Inlovexy.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md')">
+                    <h2 class="post-title" onclick="loadPost('post1')">
                         构造专练
                     </h2>
                     <div class="post-meta">
@@ -808,7 +918,7 @@
             </article>
             <article class="post" data-tags="算法 dp 优化">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Inlovexy/Inlovexy.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md')">
+                    <h2 class="post-title" onclick="loadPost('post2')">
                         决策性 dp
                     </h2>
                     <div class="post-meta">
@@ -837,7 +947,55 @@
     <!-- 阅读器 -->
     <div id="reader">
         <button onclick="closeReader()">Back</button>
+        
+        <div class="reader-tools">
+            <div class="reader-controls">
+                <button class="reader-btn" onclick="changeFontSize('increase')">
+                    <i class="fas fa-text-height"></i> 增大字体
+                </button>
+                <button class="reader-btn" onclick="changeFontSize('decrease')">
+                    <i class="fas fa-text-height"></i> 减小字体
+                </button>
+                <button class="reader-btn" onclick="toggleReadMode()">
+                    <i class="fas fa-book-open"></i> 阅读模式
+                </button>
+                <button class="reader-btn" onclick="sharePost()">
+                    <i class="fas fa-share-alt"></i> 分享
+                </button>
+            </div>
+            <div class="post-meta">
+                <div class="post-meta-item">
+                    <i class="far fa-eye"></i>
+                    <span id="view-count">256</span> 阅读
+                </div>
+                <div class="post-meta-item">
+                    <i class="far fa-clock"></i>
+                    <span>5 min read</span>
+                </div>
+            </div>
+        </div>
+        
         <div id="reader-content"></div>
+        
+        <!-- 评论区域 -->
+        <div class="comments">
+            <h3>评论</h3>
+            <div class="comment-form">
+                <textarea placeholder="留下您的评论..."></textarea>
+                <button onclick="addComment()">提交评论</button>
+            </div>
+            <div class="comment-list" id="comment-list">
+                <div class="comment">
+                    <div class="comment-header">
+                        <span>Merge-all</span>
+                        <span>2025-08-20</span>
+                    </div>
+                    <div class="comment-content">
+                        欢迎大家提出宝贵意见！
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- 目录 -->
@@ -877,20 +1035,14 @@
         </button>
         
         <div class="playlist" id="playlist">
-            <div class="playlist-item active" data-src="https://music.163.com/song/media/outer/url?id=1398173719.mp3" data-title="千与千寻" data-artist="久石让">
-                千与千寻 - 久石让
+            <div class="playlist-item active" data-src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3" data-title="Enthusiast" data-artist="Tours">
+                Enthusiast - Tours
             </div>
-            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=440353010.mp3" data-title="天空之城" data-artist="久石让">
-                天空之城 - 久石让
+            <div class="playlist-item" data-src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Aluminum_Cloud.mp3" data-title="Aluminum Cloud" data-artist="Chad Crouch">
+                Aluminum Cloud - Chad Crouch
             </div>
-            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="Love Story" data-artist="Taylor Swift">
-                Love Story - Taylor Swift
-            </div>
-            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="Ghost Face" data-artist="Killstation">
-                Ghost Face - Killstation
-            </div>
-            <div class="playlist-item" data-src="https://music.163.com/song/media/outer/url?id=1812019267.mp3" data-title="别怕变老" data-artist="王以太, 艾热">
-                别怕变老 - 王以太, 艾热
+            <div class="playlist-item" data-src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yvette_Norwood/Tender_Moments/Yvette_Norwood_-_01_-_We_Are_One.mp3" data-title="We Are One" data-artist="Yvette Norwood">
+                We Are One - Yvette Norwood
             </div>
         </div>
     </div>
@@ -898,6 +1050,107 @@
     <audio id="audio-player"></audio>
 
     <script>
+        // 示例文章内容
+        const postContents = {
+            post1: `# 构造专练
+
+构造题是算法竞赛中常见的一种题型，需要选手通过观察和推理找到问题的规律，然后构造出满足条件的解。
+
+## 基本思路
+
+1. 分析问题，寻找规律
+2. 考虑特殊情况
+3. 尝试构造小规模解
+4. 验证构造的正确性
+
+## 示例代码
+
+\`\`\`cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    
+    // 构造一个特殊的数组
+    for (int i = 0; i < n; i++) {
+        arr[i] = (i * 2) % n;
+    }
+    
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    
+    return 0;
+}
+\`\`\`
+
+## 数学公式示例
+
+这是一个行内公式：$E = mc^2$
+
+这是一个块级公式：
+
+$$
+\\nabla \\cdot \\mathbf{D} = \\rho
+$$
+
+## 总结
+
+构造题需要多练习，培养观察力和创造力。`,
+            
+            post2: `# 决策性动态规划
+
+决策性动态规划是动态规划的一种变体，需要在每个状态做出决策。
+
+## 基本概念
+
+决策性DP通常涉及：
+
+1. 状态定义
+2. 状态转移方程
+3. 决策选择
+4. 边界条件
+
+## 示例：背包问题
+
+\`\`\`python
+def knapsack(weights, values, capacity):
+    n = len(weights)
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+    
+    for i in range(1, n + 1):
+        for w in range(1, capacity + 1):
+            if weights[i-1] <= w:
+                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])
+            else:
+                dp[i][w] = dp[i-1][w]
+    
+    return dp[n][capacity]
+\`\`\`
+
+## 优化技巧
+
+1. 状态压缩
+2. 斜率优化
+3. 四边形不等式
+
+## 数学表达
+
+状态转移方程可以表示为：
+
+$$
+dp[i][j] = \\max \\{ dp[i-1][j], dp[i-1][j-w_i] + v_i \\}
+$$
+
+## 总结
+
+决策性DP的关键在于正确定义状态和决策过程。`
+        };
+
         // 初始化 marked
         document.addEventListener('DOMContentLoaded', () => {
             // 设置CSS变量
@@ -1080,7 +1333,7 @@
         }
 
         // 加载文章
-        function loadPost(url) {
+        function loadPost(postId) {
             const reader = document.getElementById('reader');
             const contentEl = document.getElementById('reader-content');
             const tocToggle = document.getElementById('toc-toggle');
@@ -1097,56 +1350,52 @@
             tocToggle.style.display = 'flex';
             if (postProgressBar) postProgressBar.style.display = 'block';
 
-            fetch(url)
-                .then(res => {
-                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                    return res.text();
-                })
-                .then(md => {
-                    contentEl.innerHTML = marked.parse(md);
+            // 模拟加载延迟
+            setTimeout(() => {
+                const content = postContents[postId] || '<p>文章内容不存在</p>';
+                contentEl.innerHTML = marked.parse(content);
 
-                    // 处理代码块
-                    contentEl.querySelectorAll('pre code').forEach(block => {
-                        const lang = block.className.replace('language-', '') || 'text';
-                        const displayName = { 'cpp': 'C++', 'python': 'Python', 'java': 'Java' }[lang] || lang.toUpperCase();
+                // 处理代码块
+                contentEl.querySelectorAll('pre code').forEach(block => {
+                    const lang = block.className.replace('language-', '') || 'text';
+                    const displayName = { 'cpp': 'C++', 'python': 'Python', 'java': 'Java' }[lang] || lang.toUpperCase();
 
-                        const langTag = document.createElement('div');
-                        langTag.textContent = displayName;
-                        langTag.className = 'lang-tag';
-                        block.parentNode.style.position = 'relative';
-                        block.parentNode.insertBefore(langTag, block);
+                    const langTag = document.createElement('div');
+                    langTag.textContent = displayName;
+                    langTag.className = 'lang-tag';
+                    block.parentNode.style.position = 'relative';
+                    block.parentNode.insertBefore(langTag, block);
 
-                        const btn = document.createElement('button');
-                        btn.className = 'copy-btn';
-                        btn.textContent = 'COPY';
-                        btn.onclick = () => {
-                            navigator.clipboard.writeText(block.textContent).then(() => {
-                                btn.textContent = '✓';
-                                setTimeout(() => btn.textContent = 'COPY', 2000);
-                            }).catch(err => {
-                                console.error('复制失败:', err);
-                                btn.textContent = '✗';
-                                setTimeout(() => btn.textContent = 'COPY', 2000);
-                            });
-                        };
-                        block.parentNode.appendChild(btn);
+                    const btn = document.createElement('button');
+                    btn.className = 'copy-btn';
+                    btn.textContent = 'COPY';
+                    btn.onclick = () => {
+                        navigator.clipboard.writeText(block.textContent).then(() => {
+                            btn.textContent = '✓';
+                            setTimeout(() => btn.textContent = 'COPY', 2000);
+                        }).catch(err => {
+                            console.error('复制失败:', err);
+                            btn.textContent = '✗';
+                            setTimeout(() => btn.textContent = 'COPY', 2000);
+                        });
+                    };
+                    block.parentNode.appendChild(btn);
 
-                        hljs.highlightElement(block);
-                    });
-
-                    // 生成目录
-                    generateTOC();
-
-                    // 渲染数学公式
-                    if (window.MathJax) {
-                        MathJax.typesetClear();
-                        MathJax.typeset([contentEl]);
-                    }
-                })
-                .catch(err => {
-                    console.error('加载失败:', err);
-                    contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
+                    hljs.highlightElement(block);
                 });
+
+                // 生成目录
+                generateTOC();
+
+                // 渲染数学公式
+                if (window.MathJax) {
+                    MathJax.typesetClear();
+                    MathJax.typeset([contentEl]);
+                }
+
+                // 更新阅读量
+                updateViewCount();
+            }, 500);
         }
 
         function closeReader() {
@@ -1162,6 +1411,92 @@
             if (postProgressBar) {
                 postProgressBar.style.display = 'none';
             }
+        }
+
+        // 更新阅读量
+        function updateViewCount() {
+            const viewCount = document.getElementById('view-count');
+            if (viewCount) {
+                const currentCount = parseInt(viewCount.textContent);
+                viewCount.textContent = currentCount + 1;
+            }
+        }
+
+        // 改变字体大小
+        function changeFontSize(action) {
+            const content = document.getElementById('reader-content');
+            const currentSize = parseInt(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase') {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease') {
+                content.style.fontSize = (Math.max(currentSize - 2, 14)) + 'px';
+            }
+        }
+
+        // 切换阅读模式
+        function toggleReadMode() {
+            const content = document.getElementById('reader-content');
+            content.classList.toggle('read-mode');
+            
+            if (content.classList.contains('read-mode')) {
+                content.style.maxWidth = '700px';
+                content.style.margin = '0 auto';
+                content.style.lineHeight = '1.8';
+                content.style.fontFamily = "'Georgia', serif";
+            } else {
+                content.style.maxWidth = '';
+                content.style.margin = '';
+                content.style.lineHeight = '';
+                content.style.fontFamily = '';
+            }
+        }
+
+        // 分享文章
+        function sharePost() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    text: '看看这篇有趣的文章',
+                    url: window.location.href
+                })
+                .catch(error => {
+                    console.log('分享失败:', error);
+                });
+            } else {
+                alert('分享功能在当前浏览器中不可用，您可以手动复制链接分享。');
+            }
+        }
+
+        // 添加评论
+        function addComment() {
+            const textarea = document.querySelector('.comment-form textarea');
+            const commentList = document.getElementById('comment-list');
+            
+            if (textarea.value.trim() === '') {
+                alert('评论内容不能为空');
+                return;
+            }
+            
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            
+            const comment = document.createElement('div');
+            comment.className = 'comment';
+            comment.innerHTML = `
+                <div class="comment-header">
+                    <span>游客</span>
+                    <span>${dateStr}</span>
+                </div>
+                <div class="comment-content">
+                    ${textarea.value}
+                </div>
+            `;
+            
+            commentList.insertBefore(comment, commentList.firstChild);
+            textarea.value = '';
+            
+            alert('评论提交成功！');
         }
 
         // 音乐播放器功能
