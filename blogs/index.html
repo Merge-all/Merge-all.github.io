@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Merge-all's Blog</title>
 
-  <!-- 字体：现代无衬线 -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- 字体：加入手写夸张体 Great Vibes -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="
+https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css
+  
+  " rel="stylesheet">
 
   <!-- 数学公式 & Markdown & 高亮 -->
   <script>
@@ -26,24 +29,30 @@
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js
+  
+  "></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js
+  
+  "></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css
+  
+  ">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js
+  
+  "></script>
 
   <style>
     :root {
-      --primary: #2563eb;     /* 蓝色主色（Tailwind 风格） */
-      --text: #1e293b;        /* 深灰文字 */
-      --text-light: #475569;  /* 次要文字 */
-      --bg: #ffffff;          /* 白色背景 */
+      --primary: #e91e63;
+      --text: #2c3e50;
+      --text-light: #7f8c8d;
+      --bg: #f8f9fa;
       --card: #ffffff;
-      --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-      --radius: 10px;
-      --border: #e2e8f0;
-      --transition: all 0.2s ease;
-      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-      --font-code: 'JetBrains Mono', 'Consolas', monospace;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+      --border: #ecf0f1;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     * {
@@ -53,9 +62,9 @@
     }
 
     body {
-      font-family: var(--font-main);
+      font-family: 'Source Sans Pro', sans-serif;
       color: var(--text);
-      line-height: 1.7;
+      line-height: 1.8;
       background: var(--bg);
       padding: 0;
       margin: 0;
@@ -67,11 +76,12 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 3px;
-      background: var(--primary);
+      height: 4px;
+      background: linear-gradient(90deg, #4361ee, #4cc9f0, #ff69b4);
       width: 0%;
       z-index: 1000;
       transition: width 0.1s ease;
+      box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
     }
 
     /* ============= 顶部导航 ============= */
@@ -83,43 +93,68 @@
       z-index: 100;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       padding: 16px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
+    /* Logo：粉色 + 夸张手写体 */
     .logo {
-      font-family: var(--font-main);
-      font-size: 1.4em;
-      font-weight: 600;
-      color: var(--text);
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.2em;
+      font-weight: normal;
+      color: #ff69b4; /* 粉色 */
       text-decoration: none;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 6px rgba(255, 105, 180, 0.3);
+    }
+
+    .logo:hover {
+      color: #ff1493;
+      text-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+      transform: scale(1.08);
     }
 
     .nav-links {
       display: flex;
-      gap: 24px;
+      gap: 30px;
     }
 
     .nav-links a {
-      color: var(--text-light);
+      color: var(--text);
       text-decoration: none;
-      font-weight: 500;
-      font-size: 0.95em;
-      transition: color 0.2s;
+      font-weight: 600;
+      font-size: 1em;
+      position: relative;
+      padding: 4px 0;
+      transition: var(--transition);
     }
 
-    .nav-links a:hover,
-    .nav-links a.active {
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover {
       color: var(--primary);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
     }
 
     /* ============= 主内容区域 ============= */
     .container {
       max-width: 800px;
-      margin: 100px auto 60px;
+      margin: 120px auto 60px;
       padding: 0 40px;
     }
 
@@ -129,15 +164,17 @@
     }
 
     .title h1 {
-      font-size: 2.6em;
-      font-weight: 600;
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5em;
+      font-weight: 700;
       color: var(--text);
-      margin-bottom: 12px;
+      margin-bottom: 16px;
+      line-height: 1.2;
     }
 
     .title p {
       color: var(--text-light);
-      font-size: 1.1em;
+      font-size: 1.2em;
       max-width: 600px;
       margin: 0 auto;
     }
@@ -145,7 +182,7 @@
     /* ============= 博客文章列表 ============= */
     .posts {
       display: grid;
-      gap: 20px;
+      gap: 30px;
     }
 
     .post {
@@ -158,21 +195,24 @@
     }
 
     .post:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     }
 
     .post-header {
-      padding: 24px 24px 16px;
+      padding: 30px 30px 20px;
+      border-bottom: 1px solid var(--border);
     }
 
     .post-title {
-      font-size: 1.5em;
-      font-weight: 600;
+      font-size: 1.8em;
+      font-weight: 700;
+      margin-bottom: 12px;
       color: var(--text);
       text-decoration: none;
       display: inline-block;
-      transition: color 0.2s;
+      transition: var(--transition);
+      cursor: pointer;
     }
 
     .post-title:hover {
@@ -182,10 +222,9 @@
     .post-meta {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
       color: var(--text-light);
       font-size: 0.9em;
-      margin-top: 8px;
     }
 
     .post-meta-item {
@@ -195,9 +234,9 @@
     }
 
     .post-excerpt {
-      padding: 16px 24px 24px;
+      padding: 20px 30px 30px;
       color: var(--text-light);
-      font-size: 1.05em;
+      font-size: 1.1em;
       line-height: 1.7;
     }
 
@@ -209,133 +248,194 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: var(--bg);
+      background: white;
       overflow-y: auto;
-      padding: 80px 40px 60px;
+      padding: 90px 20px 60px;
       box-sizing: border-box;
       z-index: 1000;
     }
 
+    /* 返回按钮：文字改为 Back，小一点 */
     #reader button {
-      background: none;
+      padding: 12px 28px;
+      background: var(--primary);
+      color: white;
       border: none;
-      font-size: 1.4em;
-      color: var(--text-light);
+      border-radius: 50px;
       cursor: pointer;
-      margin-bottom: 30px;
-      padding: 4px 8px;
-      transition: color 0.2s;
+      font-family: inherit;
+      font-size: 1.1em;
+      margin-bottom: 50px;
+      transition: var(--transition);
+      box-shadow: 0 8px 24px rgba(67, 97, 238, 0.4);
     }
 
     #reader button:hover {
-      color: var(--primary);
+      background: #3a56d4;
+      transform: scale(1.08);
+      box-shadow: 0 10px 30px rgba(67, 97, 238, 0.5);
     }
 
     #reader-content {
-      max-width: 800px;
+      max-width: 860px;
       margin: 0 auto;
-      font-size: 1.1em;
-      line-height: 1.8;
     }
 
-    #reader-content h1,
-    #reader-content h2,
-    #reader-content h3 {
-      font-weight: 600;
-      margin: 1.8em 0 0.8em;
-      color: var(--text);
-    }
-
-    #reader-content h1 { font-size: 2em; }
-    #reader-content h2 { font-size: 1.6em; }
-    #reader-content h3 { font-size: 1.3em; }
-
-    #reader-content p {
-      margin: 1em 0;
-    }
-
-    /* ============= 列表样式 ============= */
+    /* ============= 关键修复：列表不缩进 ============= */
     #reader-content ul,
-    #reader-content ol {
-      margin: 1em 0;
-      padding-left: 1.5em;
+    #reader-content ol,
+    .post-excerpt ul,
+    .post-excerpt ol {
+      margin-left: 0;
+      padding-left: 0;
+      list-style: none;
     }
 
-    #reader-content li {
-      margin: 0.4em 0;
+    #reader-content ul > li::before,
+    .post-excerpt ul > li::before {
+      content: "•";
+      margin-right: 0.5em;
+      color: inherit;
     }
 
-    /* ============= 链接 ============= */
+    #reader-content li,
+    .post-excerpt li {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+      text-indent: 0;
+    }
+
+    /* ============= 链接颜色：黑色，仅 hover 时变色 ============= */
     a {
-      color: var(--primary);
-      text-decoration: none;
+      text-decoration: none !important;
+      color: var(--text) !important;
+      cursor: pointer;
     }
 
     a:hover {
-      text-decoration: underline;
+      color: var(--primary) !important;
+    }
+
+    a[href^="http"] {
+      color: var(--text) !important;
+    }
+
+    a[href^="http"]:hover {
+      color: var(--primary) !important;
+      text-decoration: underline !important;
     }
 
     /* ============= 代码块 ============= */
     pre {
       position: relative;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
-      margin: 1.6em 0;
+      background: #f8f9ff;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
       overflow-x: auto;
-      font-family: var(--font-code);
-      font-size: 0.95em;
+      margin: 1.6em 0;
+      transition: 0.3s;
     }
 
     pre code {
-      font-family: var(--font-code);
-      line-height: 1.5;
       background: none;
       padding: 0;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
+    }
+
+    /* 复制按钮：更小，文字为 COPY */
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #95a5a6;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      font-size: 0.75em;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: #7f8c8d;
+      opacity: 1;
+      transform: scale(1.05);
     }
 
     .lang-tag {
       position: absolute;
-      top: 6px;
-      left: 6px;
-      background: #475569;
-      color: #e2e8f0;
-      padding: 2px 6px;
+      top: 10px;
+      left: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 3px 6px;
       border-radius: 4px;
       font-size: 0.75em;
-      font-weight: 500;
+      font-weight: bold;
     }
 
     code {
-      background: #f1f5f9;
-      padding: 2px 5px;
+      background: #f0f0f0;
+      padding: 2px 6px;
       border-radius: 4px;
-      font-family: var(--font-code);
-      font-size: 0.9em;
-      color: #dc2626;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
     }
 
-    /* ============= 图片 ============= */
+    /* ============= 图片居中 ============= */
     #reader-content img {
       display: block;
-      margin: 1.5em auto;
+      margin: 1em auto;
       max-width: 100%;
       border-radius: 8px;
-      border: 1px solid var(--border);
     }
 
     /* ============= 响应式 ============= */
     @media (max-width: 768px) {
-      .header { padding: 16px 20px; }
-      .logo { font-size: 1.3em; }
-      .nav-links { gap: 20px; }
-      .container { margin-top: 90px; padding: 0 20px; }
-      .title h1 { font-size: 2.2em; }
-      .post-header, .post-excerpt { padding: 20px; }
-      .post-title { font-size: 1.4em; }
-      #reader { padding: 80px 20px 40px; }
-      #reader button { font-size: 1.2em; }
+      .header {
+        padding: 16px 20px;
+      }
+      .logo {
+        font-size: 2em;
+      }
+      .nav-links {
+        gap: 20px;
+      }
+      .container {
+        margin-top: 100px;
+        padding: 0 20px;
+      }
+      .title h1 {
+        font-size: 2.8em;
+      }
+      .title p {
+        font-size: 1.1em;
+      }
+      .post-header, .post-excerpt {
+        padding: 25px;
+      }
+      .post-title {
+        font-size: 1.6em;
+      }
+      #reader {
+        padding: 100px 20px 40px;
+      }
+      #reader button {
+        padding: 10px 24px;
+        font-size: 1em;
+      }
+      .copy-btn {
+        padding: 3px 6px;
+        font-size: 0.7em;
+      }
+      .lang-tag {
+        font-size: 0.7em;
+      }
     }
   </style>
 </head>
@@ -363,7 +463,9 @@
     <div class="posts">
       <article class="post">
         <div class="post-header">
-          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md')">
+          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md
+  
+  ')">
             构造专练
           </h2>
           <div class="post-meta">
@@ -383,7 +485,9 @@
       </article>
       <article class="post">
         <div class="post-header">
-          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md')">
+          <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md
+  
+  ')">
             决策性 dp
           </h2>
           <div class="post-meta">
@@ -406,7 +510,7 @@
 
   <!-- 阅读器 -->
   <div id="reader">
-    <button onclick="closeReader()">←</button>
+    <button onclick="closeReader()">Back</button>
     <div id="reader-content"></div>
   </div>
 
@@ -434,27 +538,29 @@
       });
     });
 
-    // 加载文章（修复：自动 trim URL）
+    // 加载文章
     function loadPost(url) {
       const reader = document.getElementById('reader');
       const contentEl = document.getElementById('reader-content');
 
-      if (!contentEl) return;
+      if (!contentEl) {
+        console.error('reader-content element not found');
+        return;
+      }
 
       reader.style.display = 'block';
       window.scrollTo(0, 0);
-      contentEl.innerHTML = '<p style="color:#64748b; text-align:center; margin:40px 0;">Loading...</p>';
+      contentEl.innerHTML = '<p style="color:#7f8c8d; text-align:center; font-size:1.1em">加载中……</p>';
 
-      // 修复：去除 URL 空格
-      fetch(url.trim())
+      fetch(url)
         .then(res => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
           return res.text();
         })
         .then(md => {
           contentEl.innerHTML = marked.parse(md);
 
-          // 添加语言标签（不再添加复制按钮）
+          // 处理代码块
           contentEl.querySelectorAll('pre code').forEach(block => {
             const lang = block.className.replace('language-', '') || 'text';
             const displayName = { 'cpp': 'C++', 'python': 'Python', 'java': 'Java' }[lang] || lang.toUpperCase();
@@ -464,6 +570,21 @@
             langTag.className = 'lang-tag';
             block.parentNode.style.position = 'relative';
             block.parentNode.insertBefore(langTag, block);
+
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.onclick = () => {
+              navigator.clipboard.writeText(block.textContent).then(() => {
+                btn.textContent = '✓';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+              }).catch(err => {
+                console.error('复制失败:', err);
+                btn.textContent = '✗';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+              });
+            };
+            block.parentNode.appendChild(btn);
 
             hljs.highlightElement(block);
           });
@@ -475,12 +596,16 @@
           }
         })
         .catch(err => {
-          contentEl.innerHTML = `<p style="color:#dc2626; text-align:center">❌ 加载失败: ${err.message}</p>`;
+          console.error('加载失败:', err);
+          contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
         });
     }
 
     function closeReader() {
-      document.getElementById('reader').style.display = 'none';
+      const reader = document.getElementById('reader');
+      if (reader) {
+        reader.style.display = 'none';
+      }
     }
   </script>
 </body>
