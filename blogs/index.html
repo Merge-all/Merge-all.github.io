@@ -42,6 +42,7 @@
             --border: #ecf0f1;
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             --header-height: 80px;
+            --toc-width: 280px;
         }
         [data-theme="dark"] {
             --primary: #4cc9f0;
@@ -321,6 +322,19 @@
             max-width: 860px;
             margin: 0 auto;
         }
+        /* 修复列表缩进和行间距 */
+        #reader-content ul, #reader-content ol {
+            padding-left: 1.5em;
+            margin: 1em 0;
+        }
+        #reader-content ul li, #reader-content ol li {
+            margin-bottom: 0.5em;
+            text-align: justify;
+        }
+        /* 保证列表项和第一行文字左对齐 */
+        #reader-content ul li::before, #reader-content ol li::before {
+            display: none;
+        }
         /* 代码块 */
         pre {
             position: relative;
@@ -372,8 +386,9 @@
         .toc {
             position: fixed;
             top: 100px;
-            right: 20px;
-            max-width: 280px;
+            right: calc(-1 * var(--toc-width));
+            width: var(--toc-width);
+            max-width: 100%;
             max-height: calc(100vh - 150px);
             overflow-y: auto;
             background: var(--card);
@@ -381,8 +396,12 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
-            display: none;
+            display: block;
             z-index: 998;
+            transition: right 0.3s ease;
+        }
+        .toc.open {
+            right: 20px;
         }
         .toc-header {
             font-weight: bold;
@@ -391,14 +410,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        .toc-close {
-            cursor: pointer;
-            font-size: 1.2em;
-            color: var(--text-light);
-        }
-        .toc-close:hover {
-            color: var(--primary);
         }
         .toc ul {
             list-style: none;
@@ -411,10 +422,17 @@
             color: var(--text-light);
             font-size: 0.9em;
             transition: var(--transition);
+            display: block;
+            padding: 4px 0;
         }
         .toc a:hover {
             color: var(--primary);
         }
+        .toc a.active {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        /* 目录切换按钮 */
         .toc-toggle {
             position: fixed;
             top: 100px;
@@ -431,18 +449,29 @@
             z-index: 999;
             box-shadow: var(--shadow);
             transition: var(--transition);
+            opacity: 1;
+            visibility: visible;
         }
-        .toc-toggle:hover {
-            transform: scale(1.1);
+        .toc-toggle.hidden {
+            opacity: 0;
+            visibility: hidden;
         }
-        /* 文章目录高亮 */
-        .toc a.active {
-            color: var(--primary);
-            font-weight: bold;
+        .toc-toggle i {
+            transition: transform 0.3s ease;
+        }
+        .toc.open + .toc-toggle i {
+            transform: rotate(90deg);
         }
         @media (max-width: 768px) {
-            .toc, .toc-toggle {
-                display: none !important;
+            .toc {
+                right: -100%;
+            }
+            .toc.open {
+                right: 0;
+            }
+            .toc-toggle {
+                right: 15px;
+                top: 15px;
             }
         }
     </style>
@@ -547,19 +576,18 @@
         <div id="reader-content"></div>
     </div>
 
-    <div class="toc-toggle" id="toc-toggle">
-        <i class="fas fa-list"></i>
-    </div>
-    
     <div class="toc" id="toc">
         <div class="toc-header">
             <span>博客目录</span>
-            <span class="toc-close" id="toc-close">&times;</span>
         </div>
         <ul id="blog-toc">
             <li><a href="#post-0" onclick="scrollToPost(0)">构造专练</a></li>
             <li><a href="#post-1" onclick="scrollToPost(1)">决策性 dp</a></li>
         </ul>
+    </div>
+    
+    <div class="toc-toggle" id="toc-toggle">
+        <i class="fas fa-list"></i>
     </div>
 
     <script>
@@ -595,11 +623,6 @@
                     postProgressBar.style.display = 'none';
                 }
                 
-                const tocToggle = document.getElementById('toc-toggle');
-                if (tocToggle) {
-                    tocToggle.style.display = document.getElementById('reader').style.display === 'block' ? 'flex' : 'none';
-                }
-                
                 // 高亮当前文章
                 highlightCurrentPost();
             });
@@ -625,15 +648,12 @@
             });
             
             const tocToggle = document.getElementById('toc-toggle');
-            const tocClose = document.getElementById('toc-close');
             const toc = document.getElementById('toc');
             
+            // 点击目录切换按钮，切换目录的 open 状态
             tocToggle?.addEventListener('click', () => {
-                toc.style.display = 'block';
-            });
-            
-            tocClose?.addEventListener('click', () => {
-                toc.style.display = 'none';
+                toc.classList.toggle('open');
+                tocToggle.classList.toggle('active');
             });
             
             // 为文章添加ID以便定位
@@ -660,26 +680,25 @@
         
         function generateTOC() {
             const content = document.getElementById('reader-content');
-            const headings = content.querySelectorAll('h1');
+            const headings = content.querySelectorAll('h1, h2, h3');
             const toc = document.getElementById('toc');
             
             if (headings.length === 0) {
-                toc.innerHTML = '<div class="toc-header"><span>目录</span><span class="toc-close">&times;</span></div><p>无标题</p>';
+                toc.innerHTML = '<div class="toc-header"><span>目录</span></div><p>无标题</p>';
                 return;
             }
             
-            let html = '<div class="toc-header"><span>目录</span><span class="toc-close">&times;</span></div><ul>';
+            let html = '<div class="toc-header"><span>目录</span></div><ul>';
             headings.forEach((h, idx) => {
+                const level = parseInt(h.tagName.charAt(1)) - 1; // h1 -> level 0, h2 -> level 1
+                const indent = level * 10; // 为不同层级添加缩进
                 const id = `article-${currentPostIndex}-${idx}`;
                 h.id = id;
-                html += `<li><a href="#${id}">${h.textContent}</a></li>`;
+                html += `<li style="margin-left:${indent}px"><a href="#${id}">${h.textContent}</a></li>`;
             });
             html += '</ul>';
             
             toc.innerHTML = html;
-            document.querySelector('.toc-close')?.addEventListener('click', () => {
-                toc.style.display = 'none';
-            });
         }
         
         function loadPost(url, index = 0) {
@@ -725,7 +744,8 @@
         
         function closeReader() {
             document.getElementById('reader').style.display = 'none';
-            document.getElementById('toc-toggle').style.display = 'none';
+            document.getElementById('toc-toggle').classList.remove('hidden');
+            document.getElementById('toc').classList.remove('open');
             document.getElementById('post-reading-progress').style.display = 'none';
         }
         
@@ -767,7 +787,7 @@
             });
             
             // 高亮当前文章
-            if (currentPostIndex >= 0) {
+            if (currentPostIndex >= 0 && tocLinks[currentPostIndex]) {
                 tocLinks[currentPostIndex].classList.add('active');
             }
         }
