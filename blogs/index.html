@@ -60,13 +60,16 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Source Sans Pro', sans-serif;
+            font-family: 'Source Sans Pro', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             color: var(--text);
             line-height: 1.6;
             background: var(--bg);
             padding: 0;
             margin: 0;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         /* 顶部进度条 */
@@ -99,7 +102,7 @@
             left: 0;
             right: 0;
             z-index: 100;
-            background: rgba(var(--card-rgb), 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
             padding: 16px 40px;
@@ -166,7 +169,7 @@
         }
         .theme-toggle:hover {
             color: var(--primary);
-            background: rgba(var(--primary-rgb), 0.1);
+            background: rgba(67, 97, 238, 0.1);
         }
         /* 搜索框 */
         .search-container {
@@ -279,7 +282,7 @@
             flex-wrap: wrap;
         }
         .post-tag {
-            background: rgba(var(--primary-rgb), 0.1);
+            background: rgba(67, 97, 238, 0.1);
             color: var(--primary);
             padding: 4px 10px;
             border-radius: 20px;
@@ -322,38 +325,95 @@
             max-width: 860px;
             margin: 0 auto;
         }
-        /* 修复列表缩进和行间距 */
-        #reader-content ul, #reader-content ol {
-            padding-left: 1.5em;
-            margin: 1em 0;
+
+        /* === 标题层级与间距优化 === */
+        #reader-content h1,
+        #reader-content h2,
+        #reader-content h3,
+        #reader-content h4,
+        #reader-content h5 {
+            margin-top: 2.2em;
+            margin-bottom: 1em;
+            line-height: 1.3;
+            font-weight: 700;
+            color: var(--text);
+            text-align: left;
         }
-        #reader-content ul li, #reader-content ol li {
-            margin-bottom: 0.5em;
+        #reader-content h1 { font-size: 2.4em; }
+        #reader-content h2 { font-size: 2.0em; }
+        #reader-content h3 { font-size: 1.7em; }
+        #reader-content h4 { font-size: 1.5em; }
+        #reader-content h5 { font-size: 1.3em; }
+
+        /* === 普通段落优化 === */
+        #reader-content p {
+            margin-bottom: 1.4em;
+            line-height: 1.7;
             text-align: justify;
+            letter-spacing: -0.01em;
+            word-spacing: 0.05em;
         }
-        /* 保证列表项和第一行文字左对齐 */
-        #reader-content ul li::before, #reader-content ol li::before {
-            display: none;
+        #reader-content p {
+            text-indent: 0;
         }
-        /* 代码块 */
-        pre {
-            position: relative;
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #2d2d2d;
-            overflow-x: auto;
+
+        /* === 无序列表（· 符号）优化 === */
+        #reader-content ul {
             margin: 1.6em 0;
+            padding-left: 1.8em;
         }
-        pre code {
+        #reader-content ul li {
+            margin-bottom: 0.8em;
+            line-height: 1.6;
+        }
+        #reader-content ul li::marker {
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+
+        /* === 有序列表（1. 2. 3.）优化 === */
+        #reader-content ol {
+            margin: 1.6em 0;
+            padding-left: 1.8em;
+        }
+        #reader-content ol li {
+            margin-bottom: 0.8em;
+            line-height: 1.6;
+        }
+        #reader-content ol li::marker {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        /* === 嵌套列表缩进增强 === */
+        #reader-content ul ul,
+        #reader-content ol ol,
+        #reader-content ul ol,
+        #reader-content ol ul {
+            margin-top: 0.6em;
+            margin-bottom: 0.6em;
+            padding-left: 1.6em;
+        }
+
+        /* === 代码块前后留白与样式 === */
+        #reader-content pre {
+            margin: 2em 0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #1a1a1a;
+            border: 1px solid #2d2d2d;
+            position: relative;
+        }
+        #reader-content pre code {
             background: none;
-            padding: 0;
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 0.95em;
             color: #e0e0e0;
             white-space: pre;
             tab-size: 4;
+            padding: 0;
         }
+
         /* 语言标签 */
         .lang-tag {
             position: absolute;
@@ -366,13 +426,64 @@
             font-size: 0.75em;
             font-weight: bold;
         }
-        /* 图片居中 */
-        #reader-content img {
+
+        /* === 数学公式块间距 === */
+        #reader-content p > span[id^="MathJax"] {
+            margin: 1.8em 0;
             display: block;
-            margin: 1em auto;
+            text-align: center;
+        }
+        #reader-content h1 + p > span[id^="MathJax"],
+        #reader-content h2 + p > span[id^="MathJax"],
+        #reader-content h3 + p > span[id^="MathJax"] {
+            margin-top: 2.2em;
+        }
+
+        /* === 图片与前后内容间距 === */
+        #reader-content img {
+            margin: 1.8em auto;
             max-width: 100%;
             border-radius: 8px;
+            display: block;
         }
+        #reader-content p + img,
+        #reader-content img + p {
+            margin-top: 1.6em;
+        }
+
+        /* === 表格间距优化 === */
+        #reader-content table {
+            margin: 1.8em auto;
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        #reader-content th,
+        #reader-content td {
+            padding: 10px;
+            border: 1px solid var(--border);
+        }
+        #reader-content th {
+            background: rgba(67, 97, 238, 0.1);
+            font-weight: 600;
+        }
+
+        /* === 强调文本微调 === */
+        #reader-content em,
+        #reader-content strong,
+        #reader-content code {
+            letter-spacing: -0.01em;
+        }
+
+        /* === 首个标题顶部不留空 === */
+        #reader-content h1:first-child,
+        #reader-content h2:first-child,
+        #reader-content h3:first-child,
+        #reader-content h4:first-child,
+        #reader-content h5:first-child {
+            margin-top: 0;
+        }
+
         /* 链接：不变色、无下划线 */
         a {
             text-decoration: none !important;
@@ -382,6 +493,7 @@
         a:hover {
             color: var(--primary) !important;
         }
+
         /* 目录 */
         .toc {
             position: fixed;
@@ -496,143 +608,145 @@
     </header>
 
     <div class="container">
-    <div class="title">
-        <h1>Merge-all's Blog</h1>
-        <p>记录算法学习的点点滴滴，分享思考与感悟</p>
-    </div>
-    
-    <div class="posts">
-    <article class="post" data-tags="tricks">
-        <div class="post-header">
-            <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-23-%E6%9C%89%E7%94%A8%E7%9A%84tricks.md', 0)">
-                OI 有用 tricks
-            </h2>
-            <div class="post-meta">
-                <div class="post-meta-item">
-                    <i class="far fa-calendar"></i>
-                    <span>2025-08-24</span>
-                </div>
-                <div class="post-meta-item">
-                    <i class="far fa-clock"></i>
-                    <span>5 min read</span>
-                </div>
-            </div>
-            <div class="post-tags">
-                <span class="post-tag">tricks</span>
-            </div>
+        <div class="title">
+            <h1>Merge-all's Blog</h1>
+            <p>记录算法学习的点点滴滴，分享思考与感悟</p>
         </div>
-        <div class="post-excerpt">记录在 OI 学习过程中积累的实用技巧与代码片段。</div>
-    </article>
+        
+        <div class="posts">
+            <article class="post" data-tags="tricks">
+                <div class="post-header">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-23-%E6%9C%89%E7%94%A8%E7%9A%84tricks.md', 0)">
+                        OI 有用 tricks
+                    </h2>
+                    <div class="post-meta">
+                        <div class="post-meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>2025-08-24</span>
+                        </div>
+                        <div class="post-meta-item">
+                            <i class="far fa-clock"></i>
+                            <span>5 min read</span>
+                        </div>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag">tricks</span>
+                    </div>
+                </div>
+                <div class="post-excerpt">记录在 OI 学习过程中积累的实用技巧与代码片段。</div>
+            </article>
 
-    <article class="post" data-tags="数学">
-        <div class="post-header">
-            <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-27-CSP-S%E6%A8%A1%E6%8B%9F%E8%B5%9B1.md', 1)">
-                CSP-S 模拟 1
-            </h2>
-            <div class="post-meta">
-                <div class="post-meta-item">
-                    <i class="far fa-calendar"></i>
-                    <span>2025-08-27</span>
+            <article class="post" data-tags="数学">
+                <div class="post-header">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-27-CSP-S%E6%A8%A1%E6%8B%9F%E8%B5%9B1.md', 1)">
+                        CSP-S 模拟 1
+                    </h2>
+                    <div class="post-meta">
+                        <div class="post-meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>2025-08-27</span>
+                        </div>
+                        <div class="post-meta-item">
+                            <i class="far fa-clock"></i>
+                            <span>5 min read</span>
+                        </div>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag">模拟赛</span>
+                    </div>
                 </div>
-                <div class="post-meta-item">
-                    <i class="far fa-clock"></i>
-                    <span>5 min read</span>
+                <div class="post-excerpt">模拟赛</div>
+            </article>
+            
+            <article class="post" data-tags="算法 构造">
+                <div class="post-header">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md', 1)">
+                        构造专练
+                    </h2>
+                    <div class="post-meta">
+                        <div class="post-meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>2025-08-11</span>
+                        </div>
+                        <div class="post-meta-item">
+                            <i class="far fa-clock"></i>
+                            <span>5 min read</span>
+                        </div>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag">算法</span>
+                        <span class="post-tag">构造</span>
+                    </div>
                 </div>
-            </div>
-            <div class="post-tags">
-                <span class="post-tag">模拟赛</span>
-            </div>
-        </div>
-        <div class="post-excerpt">模拟赛</div>
-    </article>
-    
-    <article class="post" data-tags="算法 构造">
-        <div class="post-header">
-            <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md', 1)">
-                构造专练
-            </h2>
-            <div class="post-meta">
-                <div class="post-meta-item">
-                    <i class="far fa-calendar"></i>
-                    <span>2025-08-11</span>
-                </div>
-                <div class="post-meta-item">
-                    <i class="far fa-clock"></i>
-                    <span>5 min read</span>
-                </div>
-            </div>
-            <div class="post-tags">
-                <span class="post-tag">算法</span>
-                <span class="post-tag">构造</span>
-            </div>
-        </div>
-        <div class="post-excerpt">构造太菜了，多多练习涨涨脑子。</div>
-    </article>
+                <div class="post-excerpt">构造太菜了，多多练习涨涨脑子。</div>
+            </article>
 
-    <article class="post" data-tags="树 trick">
-        <div class="post-header">
-            <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-26-dfs%E5%BA%8F.md', 1)">
-                dfs 序
-            </h2>
-            <div class="post-meta">
-                <div class="post-meta-item">
-                    <i class="far fa-calendar"></i>
-                    <span>2025-08-26</span>
+            <article class="post" data-tags="树 trick">
+                <div class="post-header">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-26-dfs%E5%BA%8F.md', 1)">
+                        dfs 序
+                    </h2>
+                    <div class="post-meta">
+                        <div class="post-meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>2025-08-26</span>
+                        </div>
+                        <div class="post-meta-item">
+                            <i class="far fa-clock"></i>
+                            <span>5 min read</span>
+                        </div>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag">树</span>
+                        <span class="post-tag">trick</span>
+                    </div>
                 </div>
-                <div class="post-meta-item">
-                    <i class="far fa-clock"></i>
-                    <span>5 min read</span>
+                <div class="post-excerpt">构造太菜了，多多练习涨涨脑子。</div>
+            </article>
+            
+            <article class="post" data-tags="算法 dp 优化">
+                <div class="post-header">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md', 2)">
+                        决策性 dp
+                    </h2>
+                    <div class="post-meta">
+                        <div class="post-meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>2025-08-16</span>
+                        </div>
+                        <div class="post-meta-item">
+                            <i class="far fa-clock"></i>
+                            <span>5 min read</span>
+                        </div>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag">算法</span>
+                        <span class="post-tag">dp</span>
+                        <span class="post-tag">优化</span>
+                    </div>
                 </div>
-            </div>
-            <div class="post-tags">
-                <span class="post-tag">树</span>
-                <span class="post-tag">trick</span>
-            </div>
+                <div class="post-excerpt">优化 dp</div>
+            </article>
         </div>
-        <div class="post-excerpt">构造太菜了，多多练习涨涨脑子。</div>
-    </article>
-    
-    <article class="post" data-tags="算法 dp 优化">
-        <div class="post-header">
-            <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md', 2)">
-                决策性 dp
-            </h2>
-            <div class="post-meta">
-                <div class="post-meta-item">
-                    <i class="far fa-calendar"></i>
-                    <span>2025-08-16</span>
-                </div>
-                <div class="post-meta-item">
-                    <i class="far fa-clock"></i>
-                    <span>5 min read</span>
-                </div>
-            </div>
-            <div class="post-tags">
-                <span class="post-tag">算法</span>
-                <span class="post-tag">dp</span>
-                <span class="post-tag">优化</span>
-            </div>
-        </div>
-        <div class="post-excerpt">优化 dp</div>
-    </article>
-</div>
-    <div id="reader">
-        <button onclick="closeReader()">Back</button>
-        <div id="reader-content"></div>
-    </div>
 
-    <div class="toc" id="toc">
-        <div class="toc-header">
-            <span>博客目录</span>
+        <div id="reader">
+            <button onclick="closeReader()">Back</button>
+            <div id="reader-content"></div>
         </div>
-        <ul id="blog-toc">
-            <li><a href="#post-0" onclick="scrollToPost(0)">构造专练</a></li>
-            <li><a href="#post-1" onclick="scrollToPost(1)">决策性 dp</a></li>
-        </ul>
-    </div>
-    
-    <div class="toc-toggle" id="toc-toggle">
-        <i class="fas fa-list"></i>
+
+        <div class="toc" id="toc">
+            <div class="toc-header">
+                <span>博客目录</span>
+            </div>
+            <ul id="blog-toc">
+                <li><a href="#post-0" onclick="scrollToPost(0)">构造专练</a></li>
+                <li><a href="#post-1" onclick="scrollToPost(1)">决策性 dp</a></li>
+            </ul>
+        </div>
+        
+        <div class="toc-toggle" id="toc-toggle">
+            <i class="fas fa-list"></i>
+        </div>
     </div>
 
     <script>
@@ -668,7 +782,6 @@
                     postProgressBar.style.display = 'none';
                 }
                 
-                // 高亮当前文章
                 highlightCurrentPost();
             });
             
@@ -695,13 +808,11 @@
             const tocToggle = document.getElementById('toc-toggle');
             const toc = document.getElementById('toc');
             
-            // 点击目录切换按钮，切换目录的 open 状态
             tocToggle?.addEventListener('click', () => {
                 toc.classList.toggle('open');
                 tocToggle.classList.toggle('active');
             });
             
-            // 为文章添加ID以便定位
             document.querySelectorAll('.post').forEach((post, index) => {
                 post.id = `post-${index}`;
             });
@@ -735,8 +846,8 @@
             
             let html = '<div class="toc-header"><span>目录</span></div><ul>';
             headings.forEach((h, idx) => {
-                const level = parseInt(h.tagName.charAt(1)) - 1; // h1 -> level 0, h2 -> level 1
-                const indent = level * 10; // 为不同层级添加缩进
+                const level = parseInt(h.tagName.charAt(1)) - 1;
+                const indent = level * 10;
                 const id = `article-${currentPostIndex}-${idx}`;
                 h.id = id;
                 html += `<li style="margin-left:${indent}px"><a href="#${id}">${h.textContent}</a></li>`;
@@ -760,7 +871,6 @@
                 .then(md => {
                     contentEl.innerHTML = marked.parse(md);
                     
-                    // 添加语言标签
                     contentEl.querySelectorAll('pre code').forEach(block => {
                         const lang = block.className.replace('language-', '') || 'text';
                         const displayName = {
@@ -805,7 +915,6 @@
                     behavior: 'smooth'
                 });
                 
-                // 高亮当前文章
                 highlightCurrentPost();
             }
         }
@@ -814,10 +923,8 @@
             const posts = document.querySelectorAll('.post');
             const tocLinks = document.querySelectorAll('#blog-toc a');
             
-            // 移除所有高亮
             tocLinks.forEach(link => link.classList.remove('active'));
             
-            // 找到当前可见的文章
             let currentPostIndex = -1;
             const headerHeight = document.querySelector('.header').offsetHeight;
             const scrollPosition = window.scrollY + headerHeight + 50;
@@ -831,7 +938,6 @@
                 }
             });
             
-            // 高亮当前文章
             if (currentPostIndex >= 0 && tocLinks[currentPostIndex]) {
                 tocLinks[currentPostIndex].classList.add('active');
             }
