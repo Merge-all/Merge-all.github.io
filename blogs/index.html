@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Merge-all's Blog</title>
-    <!-- 字体 -->
+    <!-- 字体 (未修改) -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- 数学公式 & Markdown & 高亮 -->
@@ -26,8 +26,8 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- XSS防护 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -235,6 +235,12 @@
             overflow: hidden;
             transition: var(--transition);
             border: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .post.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         .post:hover {
             transform: translateY(-5px);
@@ -321,6 +327,32 @@
             transform: scale(1.08);
             box-shadow: 0 10px 30px rgba(67, 97, 238, 0.5);
         }
+
+        /* 阅读器工具栏 */
+        #reader-toolbar {
+            position: fixed;
+            top: var(--header-height);
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+        }
+        #reader-toolbar button {
+            padding: 8px 12px;
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: var(--transition);
+        }
+        #reader-toolbar button:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
         #reader-content {
             max-width: 860px;
             margin: 0 auto;
@@ -395,6 +427,27 @@
             border-radius: 4px;
             font-size: 0.75em;
             font-weight: bold;
+        }
+
+        /* 复制按钮 */
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .copy-btn i {
+            font-size: 0.9em;
         }
 
         #reader-content img {
@@ -518,6 +571,38 @@
         .toc.open + .toc-toggle i {
             transform: rotate(90deg);
         }
+
+        /* 返回顶部按钮 */
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #back-to-top:hover {
+            background: var(--secondary);
+            transform: translateY(-3px) scale(1.05);
+        }
+
         @media (max-width: 768px) {
             .toc {
                 right: -100%;
@@ -528,6 +613,11 @@
             .toc-toggle {
                 right: 15px;
                 top: 15px;
+            }
+            #reader-toolbar {
+                flex-direction: column;
+                top: 100px;
+                right: 15px;
             }
         }
     </style>
@@ -541,11 +631,11 @@
         <nav class="nav-links">
             <div class="search-container">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="搜索文章..." id="search-input">
+                <input type="text" class="search-input" placeholder="搜索文章..." id="search-input" aria-label="搜索文章">
             </div>
             <a href="/">Home</a>
             <a href="#" class="active">Blog</a>
-            <button class="theme-toggle" id="theme-toggle">
+            <button class="theme-toggle" id="theme-toggle" aria-label="切换主题">
                 <i class="fas fa-moon"></i>
             </button>
         </nav>
@@ -560,7 +650,7 @@
         <div class="posts">
             <article class="post" data-tags="tricks">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-23-%E6%9C%89%E7%94%A8%E7%9A%84tricks.md', 0)">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-23-%E6%9C%89%E7%94%A8%E7%9A%84tricks.md', 0)" tabindex="0">
                         OI 有用 tricks 和常见错误
                     </h2>
                     <div class="post-meta">
@@ -582,7 +672,7 @@
 
             <article class="post" data-tags="模拟赛">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-09-06-CSP-S3.md', 1)">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-09-06-CSP-S3.md', 1)" tabindex="0">
                         CSP-S 模拟 3
                     </h2>
                     <div class="post-meta">
@@ -604,7 +694,7 @@
 
             <article class="post" data-tags="模拟赛">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-09-02-CSP-S2.md', 1)">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-09-02-CSP-S2.md', 1)" tabindex="0">
                         CSP-S 模拟 2
                     </h2>
                     <div class="post-meta">
@@ -626,7 +716,7 @@
 
             <article class="post" data-tags="模拟赛">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-27-CSP-S%E6%A8%A1%E6%8B%9F%E8%B5%9B1.md', 1)">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-27-CSP-S%E6%A8%A1%E6%8B%9F%E8%B5%9B1.md', 1)" tabindex="0">
                         CSP-S 模拟 1
                     </h2>
                     <div class="post-meta">
@@ -648,7 +738,7 @@
             
             <article class="post" data-tags="算法 构造">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md', 1)">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-11-%E6%9E%84%E9%80%A0%E4%B8%93%E7%BB%83.md', 1)" tabindex="0">
                         构造专练
                     </h2>
                     <div class="post-meta">
@@ -671,7 +761,7 @@
 
             <article class="post" data-tags="树 trick">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-26-dfs%E5%BA%8F.md', 1)">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-26-dfs%E5%BA%8F.md', 1)" tabindex="0">
                         dfs 序
                     </h2>
                     <div class="post-meta">
@@ -694,7 +784,7 @@
             
             <article class="post" data-tags="算法 dp 优化">
                 <div class="post-header">
-                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md', 2)">
+                    <h2 class="post-title" onclick="loadPost('https://raw.githubusercontent.com/Merge-all/Merge-all.github.io/main/blogs/posts/2025-08-16-%E5%86%B3%E7%AD%96%E6%80%A7dp.md', 2)" tabindex="0">
                         决策性 dp
                     </h2>
                     <div class="post-meta">
@@ -718,8 +808,14 @@
         </div>
 
         <div id="reader">
-            <button onclick="closeReader()">Back</button>
-            <div id="reader-content"></div>
+            <div id="reader-toolbar">
+                <button id="font-increase" aria-label="增大字体">A+</button>
+                <button id="font-decrease" aria-label="减小字体">A-</button>
+                <button id="bg-yellow" aria-label="护眼模式">护眼</button>
+                <button id="bg-normal" aria-label="默认模式">默认</button>
+            </div>
+            <button onclick="closeReader()" aria-label="返回博客首页">Back</button>
+            <div id="reader-content" aria-live="polite"></div>
         </div>
 
         <div class="toc" id="toc">
@@ -732,9 +828,13 @@
             </ul>
         </div>
         
-        <div class="toc-toggle" id="toc-toggle">
+        <div class="toc-toggle" id="toc-toggle" aria-label="显示/隐藏目录">
             <i class="fas fa-list"></i>
         </div>
+
+        <button id="back-to-top" aria-label="返回顶部">
+            <i class="fas fa-arrow-up"></i>
+        </button>
     </div>
 
     <script>
@@ -744,14 +844,31 @@
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme);
             
-            marked.setOptions({
-                gfm: true,
-                breaks: true,
-                smartLists: true,
-                highlight: (code, lang) => {
-                    const hl = hljs.getLanguage(lang) ? lang : 'plaintext';
-                    return hljs.highlight(code, { language: hl }).value;
-                }
+            // 异步加载高亮库
+            loadHighlight().then(() => {
+                marked.setOptions({
+                    gfm: true,
+                    breaks: true,
+                    smartLists: true,
+                    highlight: (code, lang) => {
+                        const hl = hljs.getLanguage(lang) ? lang : 'plaintext';
+                        return hljs.highlight(code, { language: hl }).value;
+                    }
+                });
+            });
+
+            // 文章懒加载
+            const postObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        postObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.post').forEach(post => {
+                postObserver.observe(post);
             });
             
             window.addEventListener('scroll', () => {
@@ -771,6 +888,19 @@
                 }
                 
                 highlightCurrentPost();
+                
+                // 控制返回顶部按钮
+                const backToTopBtn = document.getElementById('back-to-top');
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('show');
+                } else {
+                    backToTopBtn.classList.remove('show');
+                }
+            });
+            
+            // 返回顶部
+            document.getElementById('back-to-top').addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
             
             const searchInput = document.getElementById('search-input');
@@ -800,6 +930,29 @@
                 toc.classList.toggle('open');
                 tocToggle.classList.toggle('active');
             });
+
+            // 阅读器工具栏事件
+            document.getElementById('font-increase')?.addEventListener('click', () => {
+                const content = document.getElementById('reader-content');
+                const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+                content.style.fontSize = (currentSize * 1.1) + 'px';
+            });
+
+            document.getElementById('font-decrease')?.addEventListener('click', () => {
+                const content = document.getElementById('reader-content');
+                const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+                content.style.fontSize = (currentSize * 0.9) + 'px';
+            });
+
+            document.getElementById('bg-yellow')?.addEventListener('click', () => {
+                document.getElementById('reader').style.background = '#fef6e4';
+                document.getElementById('reader-content').style.color = '#5c4a33';
+            });
+
+            document.getElementById('bg-normal')?.addEventListener('click', () => {
+                document.getElementById('reader').style.background = '';
+                document.getElementById('reader-content').style.color = '';
+            });
             
             document.querySelectorAll('.post').forEach((post, index) => {
                 post.id = `post-${index}`;
@@ -822,6 +975,24 @@
         
         let currentPostIndex = 0;
         
+        async function loadHighlight() {
+            if (!window.hljs) {
+                await new Promise(resolve => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
+                    script.onload = resolve;
+                    document.head.appendChild(script);
+                });
+                await new Promise(resolve => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
+                    link.onload = resolve;
+                    document.head.appendChild(link);
+                });
+            }
+        }
+
         function generateTOC() {
             const content = document.getElementById('reader-content');
             const headings = content.querySelectorAll('h1, h2, h3');
@@ -835,29 +1006,70 @@
             let html = '<div class="toc-header"><span>目录</span></div><ul>';
             headings.forEach((h, idx) => {
                 const level = parseInt(h.tagName.charAt(1)) - 1;
-                const indent = level * 10;
                 const id = `article-${currentPostIndex}-${idx}`;
                 h.id = id;
-                html += `<li style="margin-left:${indent}px"><a href="#${id}">${h.textContent}</a></li>`;
+                html += `<li><a href="#${id}">${h.textContent}</a></li>`;
             });
             html += '</ul>';
             
             toc.innerHTML = html;
+
+            // 为新生成的 TOC 添加滚动监听
+            const tocLinks = toc.querySelectorAll('a');
+            tocLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        }
+
+        function updateActiveTOC() {
+            const headings = document.querySelectorAll('#reader-content h1, h2, h3');
+            let currentId = '';
+            const scrollPosition = window.scrollY + 200; // 偏移量，可根据需要调整
+
+            headings.forEach(heading => {
+                const rect = heading.getBoundingClientRect();
+                const elementTop = rect.top + window.scrollY;
+                const elementBottom = elementTop + heading.offsetHeight;
+
+                if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
+                    currentId = heading.id;
+                }
+            });
+
+            document.querySelectorAll('#toc a').forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === `#${currentId}`) {
+                    a.classList.add('active');
+                }
+            });
         }
         
         function loadPost(url, index = 0) {
             currentPostIndex = index;
             const reader = document.getElementById('reader');
             const contentEl = document.getElementById('reader-content');
+            const tocToggle = document.getElementById('toc-toggle');
+            const toolbar = document.getElementById('reader-toolbar');
             
             reader.style.display = 'block';
+            toolbar.style.display = 'flex';
+            tocToggle.classList.add('hidden');
             window.scrollTo(0, 0);
             contentEl.innerHTML = '<p style="color:#7f8c8d; text-align:center">加载中……</p>';
             
             fetch(url)
-                .then(res => res.ok ? res.text() : Promise.reject(new Error('加载失败')))
+                .then(res => res.ok ? res.text() : Promise.reject(new Error('网络错误，请检查链接或稍后重试')))
                 .then(md => {
-                    contentEl.innerHTML = marked.parse(md);
+                    // 使用 DOMPurify 清理 HTML
+                    const cleanHTML = DOMPurify.sanitize(marked.parse(md));
+                    contentEl.innerHTML = cleanHTML;
                     
                     contentEl.querySelectorAll('pre code').forEach(block => {
                         const lang = block.className.replace('language-', '') || 'text';
@@ -872,13 +1084,41 @@
                         langTag.textContent = displayName;
                         block.parentNode.style.position = 'relative';
                         block.parentNode.insertBefore(langTag, block);
+
+                        // 添加复制按钮
+                        const copyBtn = document.createElement('button');
+                        copyBtn.className = 'copy-btn';
+                        copyBtn.innerHTML = '<i class="far fa-copy"></i>';
+                        copyBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            navigator.clipboard.writeText(block.innerText).then(() => {
+                                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                                setTimeout(() => {
+                                    copyBtn.innerHTML = '<i class="far fa-copy"></i>';
+                                }, 2000);
+                            }).catch(err => {
+                                alert('复制失败: ' + err);
+                            });
+                        };
+                        block.parentNode.appendChild(copyBtn);
                         
                         hljs.highlightElement(block);
                     });
                     
                     generateTOC();
                     
-                    if (window.MathJax) MathJax.typeset([contentEl]);
+                    if (window.MathJax) {
+                        MathJax.typesetPromise([contentEl]).catch((err) => console.log('MathJax Error', err));
+                    }
+
+                    // 更新页面标题以利于SEO
+                    const firstHeading = contentEl.querySelector('h1');
+                    if (firstHeading) {
+                        document.title = `${firstHeading.textContent} | Merge-all's Blog`;
+                    }
+
+                    // 监听滚动，更新TOC高亮
+                    reader.addEventListener('scroll', debounce(updateActiveTOC, 100));
                 })
                 .catch(err => {
                     contentEl.innerHTML = `<p style="color:red; text-align:center">❌ 加载失败：${err.message}</p>`;
@@ -886,10 +1126,15 @@
         }
         
         function closeReader() {
-            document.getElementById('reader').style.display = 'none';
-            document.getElementById('toc-toggle').classList.remove('hidden');
-            document.getElementById('toc').classList.remove('open');
+            const reader = document.getElementById('reader');
+            const tocToggle = document.getElementById('toc-toggle');
+            const toolbar = document.getElementById('reader-toolbar');
+            reader.style.display = 'none';
+            toolbar.style.display = 'none';
+            tocToggle.classList.remove('hidden');
             document.getElementById('post-reading-progress').style.display = 'none';
+            // 移除滚动监听器，避免内存泄漏
+            reader.removeEventListener('scroll', updateActiveTOC);
         }
         
         function scrollToPost(index) {
